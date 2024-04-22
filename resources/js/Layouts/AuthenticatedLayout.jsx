@@ -1,125 +1,84 @@
 import { useState } from 'react';
-import ApplicationLogo from '@/Components/ApplicationLogo';
 import Dropdown from '@/Components/Dropdown';
-import NavLink from '@/Components/NavLink';
-import ResponsiveNavLink from '@/Components/ResponsiveNavLink';
-import { Link } from '@inertiajs/react';
+import { cn } from '@/lib/utils';
+import SidebarLink from '@/Components/SidebarLink';
+import NavDropDownLink from '@/Components/NavDropDownLink';
 
 export default function Authenticated({ user, header, children }) {
-    const [showingNavigationDropdown, setShowingNavigationDropdown] = useState(false);
+    const [isOpen, setIsOpen] = useState(false)
+    const [isDropDownOpen, setIsDropDownOpen] = useState(false)
+
 
     return (
-        <div className="min-h-screen bg-gray-100">
-            <nav className="bg-white border-b border-gray-100">
-                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                    <div className="flex justify-between h-16">
-                        <div className="flex">
-                            <div className="shrink-0 flex items-center">
-                                <Link href="/">
-                                    <ApplicationLogo className="block h-9 w-auto fill-current text-gray-800" />
-                                </Link>
-                            </div>
-
-                            <div className="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                                <NavLink href={route('dashboard')} active={route().current('dashboard')}>
-                                    Dashboard
-                                </NavLink>
-                            </div>
-                        </div>
-
-                        <div className="hidden sm:flex sm:items-center sm:ms-6">
-                            <div className="ms-3 relative">
-                                <Dropdown>
-                                    <Dropdown.Trigger>
-                                        <span className="inline-flex rounded-md">
-                                            <button
-                                                type="button"
-                                                className="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-none transition ease-in-out duration-150"
-                                            >
-                                                {user.name}
-
-                                                <svg
-                                                    className="ms-2 -me-0.5 h-4 w-4"
-                                                    xmlns="http://www.w3.org/2000/svg"
-                                                    viewBox="0 0 20 20"
-                                                    fill="currentColor"
-                                                >
-                                                    <path
-                                                        fillRule="evenodd"
-                                                        d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-                                                        clipRule="evenodd"
-                                                    />
-                                                </svg>
-                                            </button>
-                                        </span>
-                                    </Dropdown.Trigger>
-
-                                    <Dropdown.Content>
-                                        <Dropdown.Link href={route('profile.edit')}>Profile</Dropdown.Link>
-                                        <Dropdown.Link href={route('logout')} method="post" as="button">
-                                            Log Out
-                                        </Dropdown.Link>
-                                    </Dropdown.Content>
-                                </Dropdown>
-                            </div>
-                        </div>
-
-                        <div className="-me-2 flex items-center sm:hidden">
-                            <button
-                                onClick={() => setShowingNavigationDropdown((previousState) => !previousState)}
-                                className="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 focus:text-gray-500 transition duration-150 ease-in-out"
-                            >
-                                <svg className="h-6 w-6" stroke="currentColor" fill="none" viewBox="0 0 24 24">
-                                    <path
-                                        className={!showingNavigationDropdown ? 'inline-flex' : 'hidden'}
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                        strokeWidth="2"
-                                        d="M4 6h16M4 12h16M4 18h16"
-                                    />
-                                    <path
-                                        className={showingNavigationDropdown ? 'inline-flex' : 'hidden'}
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                        strokeWidth="2"
-                                        d="M6 18L18 6M6 6l12 12"
-                                    />
-                                </svg>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-
-                <div className={(showingNavigationDropdown ? 'block' : 'hidden') + ' sm:hidden'}>
-                    <div className="pt-2 pb-3 space-y-1">
-                        <ResponsiveNavLink href={route('dashboard')} active={route().current('dashboard')}>
-                            Dashboard
-                        </ResponsiveNavLink>
-                    </div>
-
-                    <div className="pt-4 pb-1 border-t border-gray-200">
-                        <div className="px-4">
-                            <div className="font-medium text-base text-gray-800">{user.name}</div>
-                            <div className="font-medium text-sm text-gray-500">{user.email}</div>
-                        </div>
-
-                        <div className="mt-3 space-y-1">
-                            <ResponsiveNavLink href={route('profile.edit')}>Profile</ResponsiveNavLink>
-                            <ResponsiveNavLink method="post" href={route('logout')} as="button">
-                                Log Out
-                            </ResponsiveNavLink>
-                        </div>
-                    </div>
-                </div>
+        <div className='bg-gray-100 flex'>
+             <aside className="relative bg-sidebar h-screen w-64 hidden sm:block shadow-xl">
+            <div className="p-6">
+                <a href="index.html" className="text-white text-3xl font-semibold uppercase hover:text-gray-300">Admin</a>
+            </div>
+            <nav className="text-white text-base font-semibold pt-3">
+                <SidebarLink additionalClasses={'py-4 pl-6'}/>
             </nav>
+        </aside>
 
-            {header && (
-                <header className="bg-white shadow">
-                    <div className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">{header}</div>
-                </header>
-            )}
+    <div className="relative w-full flex flex-col h-screen overflow-y-hidden">
+        {/* <!-- Desktop Header --> */}
+        <div className="w-full items-center bg-white py-2 px-6 hidden sm:flex">
+            <div className="w-1/2"></div>
+            <div className="relative w-1/2 flex justify-end">
+                <button onClick={() => setIsDropDownOpen(!isDropDownOpen)} className="realtive z-10 w-12 h-12 rounded-full overflow-hidden border-4 border-gray-400 hover:border-gray-300 focus:border-gray-300 focus:outline-none">
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTTUzn7-qinvq-jbUgQWNL-OfnXUFXfxbtwMs6-Utey3A&s"/>
+                </button>
 
-            <main>{children}</main>
+                <button onClick={() => setIsDropDownOpen(false)} className={cn("h-full w-full hidden fixed inset-0 cursor-default", {"show" : isDropDownOpen})}></button>
+                        <div
+                            className={cn("absolute w-32 bg-white rounded-lg shadow-lg py-2 mt-16 hidden",
+                                {
+                                    "block" : isDropDownOpen
+                                }
+                            )}
+                        >
+                    <NavDropDownLink/>
+                </div>
+            </div>
+        </div>
+
+        {/* <!-- Mobile Header & Nav --> */}
+        <header className="w-full bg-sidebar py-5 px-6 sm:hidden">
+            <div className="flex items-center justify-between">
+                <a href="index.html" className="text-white text-3xl font-semibold uppercase hover:text-gray-300">Admin</a>
+                <button onClick={() => setIsOpen(!isOpen)} className="text-white text-3xl focus:outline-none">
+                            {isOpen ?
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+                                </svg>
+                                :
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
+                                    <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+                                </svg>
+                            }
+                </button>
+            </div>
+
+            {/* <!-- Dropdown Nav --> */}
+            <nav className={cn("flex flex-col pt-4", {"hidden": !isOpen})}>
+                <SidebarLink additionalClasses={'py-2 pl-4'} isMobile={true}/>
+            </nav>
+        </header>
+
+        <div className="w-full h-screen overflow-x-hidden border-t flex flex-col">
+            <main className="w-full flex-grow p-6">
+                <h1 className="text-3xl text-black pb-6">{header}</h1>
+                <div>
+                    {children}
+                </div>
+            </main>
+
+            <footer className="w-full bg-white text-right p-4">
+                Built by <a target="_blank" href="https://facebook.com/webxpart" className="underline">Rajib Hasan</a>.
+            </footer>
+        </div>
+
+    </div>
         </div>
     );
 }

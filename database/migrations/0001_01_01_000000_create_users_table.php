@@ -17,6 +17,8 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
+            $table->unsignedBigInteger("reference_id")->unique();
+            $table->enum('status', ['pending', 'approved', 'suspended', 'deleted'])->default('pending');
             $table->rememberToken();
             $table->timestamps();
         });
