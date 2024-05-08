@@ -1,7 +1,9 @@
+import { cn } from "@/lib/utils";
+
 export default function InputError({ message, className = '', ...props }) {
-    return message ? (
-        <p {...props} className={'text-sm text-red-600 ' + className}>
+    return (
+        <p {...props} className={cn('text-red-500 text-sm', className)}>
             {message}
         </p>
-    ) : null;
+    )
 }

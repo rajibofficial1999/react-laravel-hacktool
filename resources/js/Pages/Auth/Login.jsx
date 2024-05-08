@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import Checkbox from '@/Components/Checkbox';
+// import Checkbox from '@/Components/Checkbox';
 import GuestLayout from '@/Layouts/GuestLayout';
 import InputError from '@/Components/InputError';
 import InputLabel from '@/Components/InputLabel';
@@ -23,7 +23,7 @@ export default function Login({ status, canResetPassword }) {
     const submit = (e) => {
         e.preventDefault();
 
-        post(route('login'));
+        post(route('loginSessions.store'));
     };
 
     return (
@@ -44,6 +44,7 @@ export default function Login({ status, canResetPassword }) {
                         className="mt-1 block w-full"
                         autoComplete="username"
                         isFocused={true}
+                        placeholder="Enter email"
                         onChange={(e) => setData('email', e.target.value)}
                     />
 
@@ -60,6 +61,7 @@ export default function Login({ status, canResetPassword }) {
                         value={data.password}
                         className="mt-1 block w-full"
                         autoComplete="current-password"
+                        placeholder="Enter password"
                         onChange={(e) => setData('password', e.target.value)}
                     />
 
@@ -68,7 +70,7 @@ export default function Login({ status, canResetPassword }) {
 
                 <div className="block mt-4">
                     <label className="flex items-center">
-                        <Checkbox
+                        <input type='checkbox'
                             name="remember"
                             checked={data.remember}
                             onChange={(e) => setData('remember', e.target.checked)}
@@ -77,16 +79,13 @@ export default function Login({ status, canResetPassword }) {
                     </label>
                 </div>
 
-                <div className="flex items-center justify-end mt-4">
-                    {canResetPassword && (
-                        <Link
-                            href={route('password.request')}
-                            className="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                        >
-                            Forgot your password?
-                        </Link>
-                    )}
-
+                <div className="flex items-center justify-between mt-4">
+                    <Link
+                        href={route('register')}
+                        className="text-sm text-primary hover:text-gray-900 rounded-md focus:outline-none"
+                    >
+                        Don't have an account?
+                    </Link>
                     <PrimaryButton className="ms-4" disabled={processing}>
                         Log in
                     </PrimaryButton>

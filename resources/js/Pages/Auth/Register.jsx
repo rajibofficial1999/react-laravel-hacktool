@@ -14,6 +14,8 @@ export default function Register() {
         password_confirmation: '',
     });
 
+    console.log(errors.password);
+
     useEffect(() => {
         return () => {
             reset('password', 'password_confirmation');
@@ -23,7 +25,7 @@ export default function Register() {
     const submit = (e) => {
         e.preventDefault();
 
-        post(route('register'));
+        post(route('users.register'));
     };
 
     return (
@@ -41,6 +43,7 @@ export default function Register() {
                         className="mt-1 block w-full"
                         autoComplete="name"
                         isFocused={true}
+                        placeholder="Enter name"
                         onChange={(e) => setData('name', e.target.value)}
                         required
                     />
@@ -58,6 +61,7 @@ export default function Register() {
                         value={data.email}
                         className="mt-1 block w-full"
                         autoComplete="username"
+                        placeholder="Enter email"
                         onChange={(e) => setData('email', e.target.value)}
                         required
                     />
@@ -75,6 +79,7 @@ export default function Register() {
                         value={data.password}
                         className="mt-1 block w-full"
                         autoComplete="new-password"
+                        placeholder="Enter password"
                         onChange={(e) => setData('password', e.target.value)}
                         required
                     />
@@ -92,6 +97,7 @@ export default function Register() {
                         value={data.password_confirmation}
                         className="mt-1 block w-full"
                         autoComplete="new-password"
+                        placeholder="Confirm password"
                         onChange={(e) => setData('password_confirmation', e.target.value)}
                         required
                     />
@@ -99,12 +105,12 @@ export default function Register() {
                     <InputError message={errors.password_confirmation} className="mt-2" />
                 </div>
 
-                <div className="flex items-center justify-end mt-4">
+                <div className="flex items-center justify-between mt-4">
                     <Link
                         href={route('login')}
-                        className="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                        className="text-primary text-sm hover:text-gray-900 rounded-md focus:outline-none"
                     >
-                        Already registered?
+                        Already have an account?
                     </Link>
 
                     <PrimaryButton className="ms-4" disabled={processing}>

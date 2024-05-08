@@ -31,4 +31,9 @@ return [
         ],
     ],
 
+    'hcaptcha' => [
+        'sitekey'=> env('HCAPTCHA_SITEKEY'),
+        'secret'=> env('HCAPTCHA_SECRET'),
+    ],
+
 ];

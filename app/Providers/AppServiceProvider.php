@@ -2,7 +2,13 @@
 
 namespace App\Providers;
 
+use App\Implemantations\AccountProccess;
+use App\Interfaces\AccountManageInterface;
+use App\Models\User;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Auth\Access\Response;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -11,7 +17,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        //
+        $this->app->bind(AccountManageInterface::class, AccountProccess::class);
     }
 
     /**
@@ -19,6 +25,16 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        Gate::define('has-permission', function () {
+            return Auth::user()->isAdmin ? Response::allow() : Response::deny('You must be an administrator.');
+        });
+
+        Gate::define('has-action-permission', function (User $user, $action_user_id) {
+            if(!Auth::user()->isAdmin){
+                return $user->id == $action_user_id ? Response::allow() : Response::deny('You do not have permission to do this.');
+            }
+
+            return true;
+        });
     }
 }

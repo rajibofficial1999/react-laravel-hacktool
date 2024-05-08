@@ -7,5 +7,5 @@ enum UserStatus: string
     case PENDING = "pending";
     case APPROVED = "approved";
     case SUSPENDED = "suspended";
-    case DELETED = "deleted";
+    case REJECTED = "rejected";
 }

@@ -1,14 +1,36 @@
+
+@import url('https://fonts.googleapis.com/css?family=Karla:400,700&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-@import url('https://fonts.googleapis.com/css?family=Karla:400,700&display=swap');
 
 @layer utilities {
-    .font-family-karla { font-family: karla; }
-    .bg-sidebar { background: #3d68ff; }
-    .cta-btn { color: #3d68ff; }
-    .active-nav-link { background: #1947ee; }
-    .nav-item:hover { background: #1947ee; }
-    .account-link:hover { background: #3d68ff; }
+    .font-family-karla {
+        @apply font-karla
+     }
+
+    .bg-sidebar {
+        @apply bg-primary
+     }
+
+    .cta-btn {
+        @apply text-primary
+     }
+    .account-link:hover {
+        @apply bg-primary
+     }
+
+    .active-nav-link {
+        @apply bg-primaryHover
+     }
+
+    .nav-item:hover {
+        @apply bg-primaryHover
+     }
+
+    .tableResponsive {
+        @apply overflow-x-auto
+    }
 }

@@ -1,38 +1,60 @@
 import { Link, usePage } from '@inertiajs/react';
 import { cn } from '@/lib/utils';
-import { BanknotesIcon, BuildingLibraryIcon, Cog8ToothIcon, UserGroupIcon } from '@heroicons/react/24/solid'
-import { dropDownLinks } from './NavDropDownLink';
+import { AcademicCapIcon, ArrowLeftCircleIcon, BanknotesIcon, Bars3BottomLeftIcon, BuildingLibraryIcon, Cog8ToothIcon, LinkIcon, UserGroupIcon } from '@heroicons/react/24/solid'
+// import { dropDownLinks } from './NavDropDownLink';
+import { ListBulletIcon } from '@heroicons/react/20/solid';
+import { useEffect, useState } from 'react';
 
-const SidebarLink = ({additionalClasses, isMobile = false}) => {
+const SidebarLink = ({additionalClasses}) => {
     const { url } = usePage()
+    const {user} = usePage().props.auth;
 
-
-    let links = [
+    let linksData = [
         {
             name: "Dashboard",
             icon: <BuildingLibraryIcon/>,
             routeName: "admin.dashboard",
+            onlyAdminLink: false
         },
         {
             name: "Users",
             icon: <UserGroupIcon/>,
-            routeName: "admin.users",
+            routeName: "admin.users.index",
+            onlyAdminLink: true
         },
         {
-            name: "Account",
+            name: "Accounts",
             icon: <BanknotesIcon/>,
-            routeName: "admin.account",
+            routeName: "admin.accounts.index",
+            onlyAdminLink: false
         },
         {
-            name: "Settings",
-            icon: <Cog8ToothIcon/>,
-            routeName: "admin.settings",
+            name: "Links",
+            icon: <LinkIcon/>,
+            routeName: "admin.links.index",
+            onlyAdminLink: false
         },
+        {
+            name: "Link Domains",
+            icon: <ListBulletIcon/>,
+            routeName: "admin.linkdomains.index",
+            onlyAdminLink: true
+        },
+        {
+            name: "Account Types",
+            icon: <Bars3BottomLeftIcon/>,
+            routeName: "admin.accountTypes.index",
+            onlyAdminLink: true
+        }
     ];
 
-    if(isMobile){
-        links = [...links, ...dropDownLinks]
-    }
+    const [links, setLinks] = useState(linksData)
+
+    useEffect(() => {
+        if(!user.is_admin) {
+            setLinks(links.filter(link => link.onlyAdminLink == user.is_admin))
+        }
+    }, [])
 
     return (
     <>
@@ -42,6 +64,15 @@ const SidebarLink = ({additionalClasses, isMobile = false}) => {
                 {link.name}
             </Link>
         )}
+
+            <Link href={route('profile.edit')} className={cn("flex sm:hidden items-center opacity-75 hover:opacity-100 text-white nav-item", {"active-nav-link": route('profile.edit').endsWith(url)}, additionalClasses)}>
+                <p className='w-6 h-6 mr-2'><AcademicCapIcon/></p>
+                Profile
+            </Link>
+            <Link as='button' method='post' href={route('logout')} className={cn("flex sm:hidden items-center opacity-75 hover:opacity-100 text-white nav-item", additionalClasses)}>
+                <p className='w-6 h-6 mr-2'><ArrowLeftCircleIcon/></p>
+                Logout
+            </Link>
     </>)
 
 }

@@ -14,7 +14,12 @@ export default {
         extend: {
             fontFamily: {
                 sans: ['Figtree', ...defaultTheme.fontFamily.sans],
+                karla: 'karla'
             },
+            colors: {
+                primary: '#3d68ff',
+                primaryHover: '#1947ee'
+            }
         },
     },
 
