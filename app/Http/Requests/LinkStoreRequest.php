@@ -2,11 +2,11 @@
 
 namespace App\Http\Requests;
 
-use App\Rules\UniqueDomainEndpoint;
 use App\Rules\ValidDomain;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
-class LinkDomainStoreRequest extends FormRequest
+class LinkStoreRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,8 +24,7 @@ class LinkDomainStoreRequest extends FormRequest
     public function rules(): array
     {
         return [
-            "domain" => ["required","string","min:3","max:255", new ValidDomain, new UniqueDomainEndpoint($this->endpoint)],
-            'endpoint' => 'required|string|min:2|max:255',
+            "link" => ["required","string","min:3","max:255", new ValidDomain, Rule::unique('links')],
             'type' => 'required|numeric|max:255|exists:account_types,id',
         ];
     }

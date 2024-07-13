@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Models\User;
 use Illuminate\Http\Request;
 use Inertia\Middleware;
 
@@ -34,6 +35,9 @@ class HandleInertiaRequests extends Middleware
             'auth' => [
                 'user' => $request->user(),
             ],
+
+            'userIds' => User::pluck('id'),
+
             'meta' => [
                 'data' => $request->session()->get('data'),
                 'successMessage' => $request->session()->get('success'),

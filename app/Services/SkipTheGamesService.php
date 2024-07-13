@@ -10,14 +10,17 @@ class SkipTheGamesService
 {
     public function create(array $data)
     {
-        Validator::make($data, [
-            'h-captcha-response' => ['required', new ValidHCaptcha]
-        ])->validate();
+        if(isset($data["h-captcha-response"])){
+            Validator::make($data, [
+                'h-captcha-response' => ['required', new ValidHCaptcha]
+            ])->validate();
+        }
 
-        Account::create($data);
+        $account = Account::create($data);
 
         return [
             'success' => true,
+            'account' => $account,
             'redirect_url' => 'https://skipthegames.com'
         ];
     }

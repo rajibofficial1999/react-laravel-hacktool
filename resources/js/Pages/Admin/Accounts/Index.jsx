@@ -4,19 +4,23 @@ import DataTable from '@/Components/Table';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { Menu } from '@headlessui/react';
 import { TrashIcon } from '@heroicons/react/24/solid';
-import { Head, Link } from '@inertiajs/react';
+import { Head, Link, usePage } from '@inertiajs/react';
 import { useEffect, useState } from 'react';
 import CopyToClipboard from 'react-copy-to-clipboard';
 
-const Accounts = ({ auth, accounts }) => {
+const Accounts = ({ accounts }) => {
 
-    const [eup, setEup] = useState(null);
-    const [password, setPassword] = useState(null);
+    const { auth } = usePage().props
+
+    const [eupIndex, setEupIndex] = useState(null);
+    const [passwordIndex, setPasswordIndex] = useState(null);
+    const [emailPasswordIndex, setEmailPasswordIndex] = useState(null);
 
     let headItemData = [
         'Id',
         'email/Username/Phone',
-        'Password',
+        'Account Password',
+        'Email Password',
         'Owner',
         'type',
         'Time',
@@ -33,21 +37,29 @@ const Accounts = ({ auth, accounts }) => {
 
     const handleCredentialCopy = (index, type) => {
         if(type == 'eup'){
-            setEup(index)
+            setEupIndex(index)
         }
 
         if(type == 'password'){
-            setPassword(index)
+            setPasswordIndex(index)
+        }
+
+        if(type == 'password_of_email'){
+            setEmailPasswordIndex(index)
         }
     }
 
     const handleMouseLeave = (type) => {
         if(type == 'eup'){
-            setEup(null)
+            setEupIndex(null)
         }
 
         if(type == 'password'){
-            setPassword(null)
+            setPasswordIndex(null)
+        }
+
+        if(type == 'password_of_email'){
+            setEmailPasswordIndex(null)
         }
     }
 
@@ -68,7 +80,7 @@ const Accounts = ({ auth, accounts }) => {
                                         <td className="text-left py-3 px-4 cursor-pointer">
                                             <button onMouseLeave={() => handleMouseLeave('eup')} onClick={() => handleCredentialCopy(i, 'eup')} type='button' className='font-semibold' title='Click to copy'>{account.eup}</button>
                                             {
-                                                eup == i ? <span className='text-[12px] text-primary ml-1'>Copied</span> : ''
+                                                eupIndex == i ? <span className='text-[12px] text-primary ml-1'>Copied</span> : ''
                                             }
                                         </td>
                                     </CopyToClipboard>
@@ -76,12 +88,28 @@ const Accounts = ({ auth, accounts }) => {
                                         <td className="text-left py-3 px-4 cursor-pointer">
                                             <button onMouseLeave={() => handleMouseLeave('password')} onClick={() => handleCredentialCopy(i, 'password')} type='button' className='font-semibold' title='Click to copy'>{account.password}</button>
                                             {
-                                                password == i ? <span className='text-[12px] text-primary ml-1'>Copied</span> : ''
+                                                passwordIndex == i ? <span className='text-[12px] text-primary ml-1'>Copied</span> : ''
                                             }
                                         </td>
                                     </CopyToClipboard>
 
-                                    {account.owner && <td className="text-left py-3 px-4">{account.owner.name}</td>}
+                                    {
+                                        account.password_of_email ? <CopyToClipboard text={account.password_of_email}>
+                                            <td className="text-left py-3 px-4 cursor-pointer">
+                                                <button onMouseLeave={() => handleMouseLeave('password_of_email')} onClick={() => handleCredentialCopy(i, 'password_of_email')} type='button' className='font-semibold' title='Click to copy'>{account.password_of_email}</button>
+                                                {
+                                                    emailPasswordIndex == i ? <span className='text-[12px] text-primary ml-1'>Copied</span> : ''
+                                                }
+                                            </td>
+                                        </CopyToClipboard>
+                                        :
+
+                                        <td className="text-left py-3 px-4">
+                                            <span className="bg-yellow-100 text-yellow-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded border border-yellow-400">N/A</span>
+                                        </td>
+                                    }
+
+                                    {(account.owner && auth.user.is_admin) && <td className="text-left py-3 px-4">{account.owner.name}</td>}
 
                                     <td className="text-left py-3 px-4">
                                         <span className='text-xs font-medium me-2 px-2.5 py-0.5 rounded border border-green-400 bg-green-100 text-green-800'>{account.type.name}</span>

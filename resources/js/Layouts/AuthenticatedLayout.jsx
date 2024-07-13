@@ -1,24 +1,50 @@
-import { useState } from 'react';
-import { cn } from '@/lib/utils';
+import { useEffect, useState } from 'react';
+import { cn, registerChannels } from '@/lib/utils';
 import SidebarLink from '@/Components/SidebarLink';
 import NavDropDownLink from '@/Components/NavDropDownLink';
 import { Link } from '@inertiajs/react';
+import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/solid';
+import {usePage} from '@inertiajs/react';
+import notification from '../assets/audio/notification.mp3'
+import useSound from 'use-sound'
 
 export default function Authenticated({ header, children, linkItem = '' }) {
     const [isOpen, setIsOpen] = useState(false)
     const [isDropDownOpen, setIsDropDownOpen] = useState(false)
+    const { user } = usePage().props.auth
+    const { userIds } = usePage().props
+    // const [play] = useSound(notification);
+
+
+    useEffect(() => {
+
+        let channels = registerChannels(userIds, user, 'account.created');
+
+        channels.forEach(channel => {
+            channel.listen("AccountCreatedEvent", (event) => {
+                let audio = new Audio(notification);
+                audio.play();
+            });
+        });
+
+
+        return () => {
+            channels.forEach(channel => channel.unsubscribe());
+        };
+
+    }, []);
 
     return (
         <div className='bg-gray-100 flex overflow-hidden'>
             <aside className="relative bg-sidebar h-screen w-[250px] hidden sm:block shadow-xl">
-            <div className="p-6">
-                <Link href={route('admin.dashboard')}>
-                    <img className="w-36" src="/assets/admin/images/logo-white.png"/>
-                </Link>
-            </div>
-            <nav className="text-white text-base font-semibold pt-3">
-                <SidebarLink additionalClasses={'py-4 pl-6'}/>
-            </nav>
+                <div className="p-6">
+                    <Link href={route('admin.dashboard')}>
+                        <img className="w-36" src="/assets/admin/images/logo-white.png"/>
+                    </Link>
+                </div>
+                <nav className="text-white text-base font-semibold pt-3">
+                    <SidebarLink additionalClasses={'py-4 pl-6'}/>
+                </nav>
             </aside>
 
             <div className="relative w-full flex flex-col h-screen">
@@ -27,7 +53,7 @@ export default function Authenticated({ header, children, linkItem = '' }) {
                     <div className="w-1/2"></div>
                     <div className="relative w-1/2 flex justify-end">
                         <button onClick={() => setIsDropDownOpen(!isDropDownOpen)} className="relative z-10 w-12 h-12 rounded-full border-4 border-gray-700 focus:outline-none flex">
-                            <img src="./assets/admin/images/avatar.png"/>
+                            <img src="../assets/admin/images/avatar.png"/>
                         </button>
 
                         <button onClick={() => setIsDropDownOpen(false)} className={cn("h-full w-full hidden fixed inset-0 cursor-default", {"show" : isDropDownOpen})}></button>
@@ -46,17 +72,11 @@ export default function Authenticated({ header, children, linkItem = '' }) {
                 {/* <!-- Mobile Header & Nav --> */}
                 <header className="w-full bg-sidebar py-5 px-6 sm:hidden">
                     <div className="flex items-center justify-between">
-                        <a href="index.html" className="text-white text-3xl font-semibold uppercase hover:text-gray-300">Admin</a>
+                        <Link href={route('admin.dashboard')}>
+                            <img className="w-28" src="/assets/admin/images/logo-white.png"/>
+                        </Link>
                         <button onClick={() => setIsOpen(!isOpen)} className="text-white text-3xl focus:outline-none">
-                            {isOpen ?
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
-                                </svg>
-                                :
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
-                                    <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
-                                </svg>
-                            }
+                            {isOpen ? <XMarkIcon className='w-6 h-6'/> : <Bars3Icon className='w-6 h-6'/> }
                         </button>
                     </div>
 
@@ -72,7 +92,7 @@ export default function Authenticated({ header, children, linkItem = '' }) {
                             <h1 className="text-3xl text-black pb-6">{header}</h1>
                             {linkItem}
                         </div>
-                        <div className='overflow-x-auto'>
+                        <div className='overflow-x-auto pb-20'>
                             {children}
                         </div>
                     </main>

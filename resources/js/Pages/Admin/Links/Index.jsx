@@ -1,35 +1,15 @@
+import DropDownMenu from '@/Components/DropDownMenu';
 import DataTable from '@/Components/Table';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
-import { Head } from '@inertiajs/react';
-import { useState } from 'react';
-import { CopyToClipboard } from 'react-copy-to-clipboard';
-import {QRCodeSVG} from 'qrcode.react';
-import HeadlessModal from '@/Components/HeadlessModal';
-import { Dialog } from '@headlessui/react';
+import { Menu } from '@headlessui/react';
+import { PencilIcon, TrashIcon } from '@heroicons/react/24/solid';
+import { Head, Link } from '@inertiajs/react';
 
-const Links = ({ auth, linkDomains }) => {
-    const [copiedItemIndex, setCopiedItemIndex] = useState(null);
-    let [isModalOpen, setIsModalOpen] = useState(false)
-    let [qrCodeValue, setQrCodeValue] = useState(null)
-    let [qrCodeType, setQrCodeType] = useState(null)
-
-    const handleCopy = (index) => {
-        setCopiedItemIndex(index)
-    }
-
-    const handleMouseLeave = () => {
-        setCopiedItemIndex(null)
-    }
-
-    const openQrCodeModal = (linkDomain) => {
-        setQrCodeValue(`https://${linkDomain.domain + linkDomain.endpoint}/${auth.user.id}`)
-        setQrCodeType(linkDomain.type.name)
-        setIsModalOpen(true)
-    }
+const Links = ({ auth, links }) => {
 
     const headItems = [
-        'no',
-        'url',
+        'Id',
+        'Link',
         'type',
         'Action',
     ];
@@ -37,47 +17,41 @@ const Links = ({ auth, linkDomains }) => {
     return (
         <AuthenticatedLayout
             header='Links'
+            linkItem={
+                <Link className='bg-primary rounded-md text-white p-2' href={route('admin.links.create')}>Create Link</Link>
+            }
         >
             <Head title="Links" />
 
-            <HeadlessModal isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen}>
-                <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
-                  <Dialog.Title
-                    as="h3"
-                    className="font-bold leading-6 text-gray-900 text-center text-xl"
-                  >
-                    {qrCodeType}
-                  </Dialog.Title>
-                  <div className="mt-4 py-4 flex justify-center items-center">
-                    <QRCodeSVG size='200' value={qrCodeValue} />
-                  </div>
-                </Dialog.Panel>
-            </HeadlessModal>
-
             <div className="w-full mt-6">
-                <div className="bg-white tableResponsive">
+                <div className="bg-white">
                     <DataTable headItems={headItems}>
                         {
-                            linkDomains.data.map((linkDomain, i) => (
+                            links.data.map((link, i) => (
                                 <tr key={i} className='odd:bg-white even:bg-slate-100'>
-                                    <td className="text-left py-3 px-4">{i + 1}</td>
-                                    <CopyToClipboard text={`https://${linkDomain.domain + linkDomain.endpoint}/${auth.user.id}`}>
-                                        <td className="text-left py-3 px-4 cursor-pointer">
-                                            <button onMouseLeave={handleMouseLeave} onClick={() => handleCopy(i)} type='button' className='font-semibold' title='Click to copy'>
-                                                {`https://${linkDomain.domain + linkDomain.endpoint}/${auth.user.id}`}
-                                            </button>
-                                            {
-                                                copiedItemIndex == i ? <span className='text-[12px] text-primary ml-1'>Copied</span> : ''
-                                            }
-                                        </td>
-                                    </CopyToClipboard>
-
+                                    <td className="text-left py-3 px-4">{link.id}</td>
+                                    <td className="text-left py-3 px-4">{link.link}</td>
                                     <td className="text-left py-3 px-4">
-                                        <span className='text-xs font-medium me-2 px-2.5 py-0.5 rounded border border-green-400 bg-green-100 text-green-800'>{linkDomain.type.name}</span>
+                                        <span className='text-xs font-medium me-2 px-2.5 py-0.5 rounded border border-green-400 bg-green-100 text-green-800'>{link.type.name}</span>
                                     </td>
 
-                                    <td className="text-left py-3 px-4 flex items-center gap-1">
-                                        <button className='py-1 px-2 bg-purple-500 rounded-md text-white' onClick={() => openQrCodeModal(linkDomain)}>QR Code</button>
+                                    <td className="text-left py-3 px-4">
+                                        <DropDownMenu additionalClasses="bg-gray-200 text-gray-900" name='Actions'>
+                                            <Menu.Item>
+                                                <Link href={route("admin.links.edit", link.id)} className="group flex w-full items-center rounded-md px-2 py-2 text-sm text-gray-900 hover:bg-primary hover:text-white">
+                                                    <PencilIcon className="mr-2 h-5 w-5"/>
+
+                                                    Edit
+                                                </Link>
+                                            </Menu.Item>
+                                            <Menu.Item>
+                                                <Link method='delete' as='button' href={route('admin.links.destroy', link.id)} className="group flex w-full items-center rounded-md px-2 py-2 text-sm text-gray-900 hover:bg-primary hover:text-white">
+                                                    <TrashIcon className="mr-2 h-5 w-5"/>
+
+                                                    Delete
+                                                </Link>
+                                            </Menu.Item>
+                                        </DropDownMenu>
                                     </td>
                                 </tr>
                             ))
@@ -85,7 +59,7 @@ const Links = ({ auth, linkDomains }) => {
                     </DataTable>
                 </div>
             </div>
-            {linkDomains.total > 10 && <Pagination items={linkDomains}/>}
+            {links.total > 10 && <Pagination items={links}/>}
         </AuthenticatedLayout>
     );
 }

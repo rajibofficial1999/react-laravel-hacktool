@@ -6,42 +6,37 @@ import TextInput from '@/Components/TextInput';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { Head, useForm } from '@inertiajs/react';
 
-const Edit = ({ auth, types, linkDomain }) => {
+const Create = ({ auth, types }) => {
 
-    const {data, setData, put, processing, errors} = useForm({
-        domain: linkDomain.domain,
-        endpoint: linkDomain.endpoint,
-        type: linkDomain.type
+    const {data, setData, post, processing, errors} = useForm({
+        link: '',
+        type: ''
     });
 
     const handleSubmit = (ev) => {
         ev.preventDefault()
-        put(route('admin.linkdomains.update', linkDomain.id))
+        post(route('admin.links.store'))
     }
 
     return (
         <AuthenticatedLayout
-            header='Edit Link Domain'
+            header='Create Link'
         >
-            <Head title="Edit Link Domain" />
+            <Head title="Create Link" />
 
             <div className="flex flex-wrap justify-center">
                     <div className="w-full lg:w-1/2 mt-6 pl-0 lg:pl-2">
                         <div className="leading-loose">
                             <form className="p-10 bg-white rounded shadow-xl" onSubmit={handleSubmit}>
                                 <div className="">
-                                    <InputLabel htmlFor="domain">Domain</InputLabel>
-                                    <TextInput placeholder="www.example.com" id="domain" value={data.domain} onChange={e => setData('domain', e.target.value)}/>
-                                    <InputError className='mt-1'>{errors.domain}</InputError>
+                                    <InputLabel htmlFor="domain">Link</InputLabel>
+                                    <TextInput placeholder="example.com" id="link" value={data.link} onChange={e => setData('link', e.target.value)}/>
+                                    <InputError className='mt-1'>{errors.link}</InputError>
                                 </div>
                                 <div className="mt-2">
-                                    <InputLabel htmlFor="endpoint">Endpoint</InputLabel>
-                                    <TextInput placeholder="/login" className="py-4" id="endpoint" value={data.endpoint} onChange={e => setData('endpoint', e.target.value)}/>
-                                    <InputError className='mt-1'>{errors.endpoint}</InputError>
-                                </div>
-                                <div className="mt-2">
-                                    <InputLabel htmlFor="type">Type</InputLabel>
-                                    <SelectInput id="type" onChange={e => setData('type', e.target.value)} defaultValue={linkDomain.type}>
+                                    <InputLabel htmlFor="type">Types</InputLabel>
+                                    <SelectInput id="type" onChange={e => setData('type', e.target.value)}>
+                                        <option value="">Select Type</option>
                                         {
                                             types.map((type) => <option key={type.id} value={type.id}>{type.name}</option>)
                                         }
@@ -59,4 +54,4 @@ const Edit = ({ auth, types, linkDomain }) => {
     );
 }
 
-export default Edit;
+export default Create;

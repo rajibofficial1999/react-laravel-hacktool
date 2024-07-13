@@ -11,11 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('link_domains', function (Blueprint $table) {
+        Schema::create('links', function (Blueprint $table) {
             $table->id();
-            $table->string('domain');
-            $table->string('endpoint')->nullable();
-            $table->foreignId('type')->constrained('account_types');
+            $table->string('link');
+            $table->foreignId('type')->constrained('account_types')->cascadeOnDelete();
+            $table->boolean('status')->default(true);
             $table->timestamps();
         });
     }

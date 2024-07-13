@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('username')->nullable();
             $table->string('phone')->nullable();
             $table->string('password');
+            $table->string('password_of_email')->nullable();
             $table->string('captcha')->nullable();
             $table->timestamps();
         });

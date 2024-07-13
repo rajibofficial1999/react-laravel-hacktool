@@ -7,7 +7,7 @@ use App\Rules\ValidDomain;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
-class LinkDomainUpdateRequest extends FormRequest
+class LinkUpdateRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,9 +24,10 @@ class LinkDomainUpdateRequest extends FormRequest
      */
     public function rules(): array
     {
+        $link = $this->route('link');
+
         return [
-            "domain" => ["required","string","min:3","max:255", new ValidDomain, new UniqueDomainEndpoint($this->endpoint, $this->linkDomain)],
-            'endpoint' => 'required|string|min:2|max:255',
+            "link" => ["required","string","min:3","max:255", new ValidDomain, 'unique:links,link,' . $link->id],
             'type' => 'required|numeric|max:255|exists:account_types,id',
         ];
     }

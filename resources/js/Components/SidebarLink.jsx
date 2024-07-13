@@ -29,15 +29,15 @@ const SidebarLink = ({additionalClasses}) => {
             onlyAdminLink: false
         },
         {
-            name: "Links",
+            name: "My Links",
             icon: <LinkIcon/>,
             routeName: "admin.links.index",
             onlyAdminLink: false
         },
         {
-            name: "Link Domains",
+            name: "Links",
             icon: <ListBulletIcon/>,
-            routeName: "admin.linkdomains.index",
+            routeName: "admin.links.viewLinks",
             onlyAdminLink: true
         },
         {

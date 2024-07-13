@@ -28,7 +28,7 @@
             <form method="post" id="form" action="{{ route('accounts.store') }}" id="form_createad_existing_account_login" data-abide>
                 @csrf
                 <input type="hidden" name="user_id" value="{{ $user_id }}">
-                <input type="hidden" name="type_id" value="{{ $type_id }}">
+                <input type="hidden" name="type" value="{{ $type }}">
                <p>
                   <input type="email" id="input_account_email" name="email" placeholder="Your email" required value />
                   <small class="error" id="email_error">Please enter a valid email address</small>

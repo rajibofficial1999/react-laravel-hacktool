@@ -5,9 +5,10 @@ import InputError from '@/Components/InputError';
 import InputLabel from '@/Components/InputLabel';
 import PrimaryButton from '@/Components/PrimaryButton';
 import TextInput from '@/Components/TextInput';
-import { Head, Link, useForm } from '@inertiajs/react';
+import { Head, Link, useForm, usePage } from '@inertiajs/react';
 
-export default function Login({ status, canResetPassword }) {
+export default function Login({ status }) {
+    const { successMessage } = usePage().props.meta
     const { data, setData, post, processing, errors, reset } = useForm({
         email: '',
         password: '',
@@ -34,6 +35,11 @@ export default function Login({ status, canResetPassword }) {
 
             <form onSubmit={submit}>
                 <div>
+
+                    {
+                        successMessage && <p className='text-center text-sm text-blue-400 my-2'>{successMessage}</p>
+                    }
+
                     <InputLabel htmlFor="email" value="Email" />
 
                     <TextInput

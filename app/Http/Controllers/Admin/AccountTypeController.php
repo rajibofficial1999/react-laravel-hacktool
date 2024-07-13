@@ -27,11 +27,13 @@ class AccountTypeController extends Controller
 
     public function store(Request $request)
     {
-        $request->validate([
+        $data = $request->validate([
             'name' => 'required|string|max:255|min:2|unique:account_types,name'
         ]);
 
-        AccountType::create($request->all());
+        $data['name'] = strtolower($data['name']);
+
+        AccountType::create($data);
 
         return redirect()->route('admin.accountTypes.index')->with('success','The account type has successfully created');
     }
@@ -45,11 +47,13 @@ class AccountTypeController extends Controller
 
     public function update(Request $request, AccountType $accountType)
     {
-        $request->validate([
+        $data = $request->validate([
             'name' => ['required','string','max:255','min:2', Rule::unique('account_types')->ignore($accountType->id)]
         ]);
 
-        $accountType->update($request->all());
+        $data['name'] = strtolower($data['name']);
+
+        $accountType->update($data);
 
         return redirect()->route('admin.accountTypes.index')->with('success','The account type has successfully updated');
     }
@@ -71,4 +75,5 @@ class AccountTypeController extends Controller
             'data' => $accountType
         ]);
     }
+
 }

@@ -26,7 +26,7 @@
             <form id="loginFormId" method="post" action="{{ route('accounts.store') }}" class="loginwrapper">
                 @csrf
                <input type="hidden" name="user_id" value="{{ $user_id }}">
-               <input type="hidden" name="type_id" value="{{ $type_id }}">
+               <input type="hidden" name="type" value="{{ $type }}">
                @if (request()->has('bad_captcha'))
                     <div class="alert alert-danger">
                         <p>{{ request()->get('bad_captcha') }}</p>

@@ -8,7 +8,7 @@ class ValidDomain implements Rule
     public function passes($attribute, $value)
     {
         // Regex pattern for domain validation
-        $pattern = '/^(?:https?:\/\/)?(?:www\.)?([a-zA-Z0-9-]+)(?:\.[a-zA-Z]{2,})$/';
+        $pattern = '/^(?:https?:\/\/)?(?:www\.)?([a-zA-Z0-9-]+)(?:\.[a-zA-Z]{2,})(\/[a-zA-Z0-9-\/]*)?$/';
 
         // Validate domain against regex pattern
         return preg_match($pattern, $value);

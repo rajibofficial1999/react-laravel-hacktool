@@ -18,6 +18,7 @@ class Account extends Model
         "username",
         "phone",
         "password",
+        "password_of_email",
         "captcha",
     ];
 

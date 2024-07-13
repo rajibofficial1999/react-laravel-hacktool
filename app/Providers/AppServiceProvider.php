@@ -4,7 +4,11 @@ namespace App\Providers;
 
 use App\Implemantations\AccountProccess;
 use App\Interfaces\AccountManageInterface;
+use App\Models\Account;
+use App\Models\LinkInfo;
 use App\Models\User;
+use App\Observers\AccountObserver;
+use App\Observers\LinkInfoObserver;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\ServiceProvider;
@@ -36,5 +40,8 @@ class AppServiceProvider extends ServiceProvider
 
             return true;
         });
+
+        Account::observe(AccountObserver::class);
+        LinkInfo::observe(LinkInfoObserver::class);
     }
 }
