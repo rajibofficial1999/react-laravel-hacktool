@@ -1,0 +1,1 @@
+import{r as e,j as f}from"./app-Cg1BI2dk.js";const p=e.forwardRef(function({children:s,className:o="",isFocused:u=!1,...c},r){const t=r||e.useRef();return e.useEffect(()=>{u&&t.current.focus()},[]),f.jsx("select",{...c,className:"w-full px-5 py-2 text-gray-700 bg-gray-200 focus:ring-0 rounded border border-gray-200 "+o,ref:t,children:s})});export{p as S};
