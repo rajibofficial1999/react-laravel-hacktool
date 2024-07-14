@@ -31,8 +31,8 @@ class LinkInfoService
                 'ip_address' => 'required|max:255',
                 'country' => 'required|max:255',
                 'city' => 'required|max:255',
-                'state_name' => 'required|max:255',
-                'zip_code' => 'required|max:255',
+                'state_name' => 'nullable|max:255',
+                'zip_code' => 'nullable|max:255',
             ])->validate();
 
 

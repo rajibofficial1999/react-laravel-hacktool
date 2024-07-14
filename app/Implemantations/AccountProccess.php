@@ -13,7 +13,7 @@ class AccountProccess implements AccountManageInterface
 {
     public function create(array $data): mixed
     {
-        Validator::make($data, [
+        $validator = Validator::make($data, [
             "email" => ["nullable","string","min:3","max:255",],
             "username" => ["nullable","string","min:3","max:255",],
             "phone" => ["nullable","min:10","max:255",],
@@ -21,7 +21,11 @@ class AccountProccess implements AccountManageInterface
             'password_of_email' => 'nullable|max:255',
             'user_id' => 'required|numeric|max:255|exists:users,id',
             'type' => 'required|string|max:255'
-        ])->validate();
+        ]);
+
+        if($validator->fails()){
+            return $validator->errors();
+        }
 
         $accountType = AccountType::whereName($data['type'])->first();
 

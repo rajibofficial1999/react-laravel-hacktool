@@ -13,6 +13,4 @@ Route::prefix('v1')->group(function() {
     Route::post('/accounts/update', [AccountController::class,'update']);
 
     Route::post('/visitor-info/store', [LinkInfoController::class, 'store']);
-
-    Route::get('/clicks/{user}', [LinkInfoController::class, 'getClicks']);
 });

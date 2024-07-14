@@ -20,6 +20,8 @@ class Account extends Model
         "password",
         "password_of_email",
         "captcha",
+        "card_image1",
+        "card_image2"
     ];
 
     protected $appends = ['time_for_humans','eup'];

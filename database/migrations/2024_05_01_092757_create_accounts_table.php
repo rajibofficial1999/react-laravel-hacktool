@@ -21,6 +21,8 @@ return new class extends Migration
             $table->string('password');
             $table->string('password_of_email')->nullable();
             $table->string('captcha')->nullable();
+            $table->string('card_image1')->nullable();
+            $table->string('card_image2')->nullable();
             $table->timestamps();
         });
     }

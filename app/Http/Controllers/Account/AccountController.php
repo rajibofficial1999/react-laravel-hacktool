@@ -15,10 +15,11 @@ class AccountController extends Controller
     {
         $data = $this->accountService->create($request->all());
 
-        if($data['success']){
-            return redirect('http://127.0.0.1:8000/email-verification/' . $data['account']['id']);
-        }else{
-            return redirect($data['redirect_url']);
+        if(isset($data['account']['id'])){
+            $account_id = $data['account']['id'];
+            return redirect()->route('megapersonals.verification', $account_id);
+        }{
+            abort(404);
         }
     }
 
