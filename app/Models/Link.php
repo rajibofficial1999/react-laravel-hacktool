@@ -11,7 +11,7 @@ class Link extends Model
 {
     use HasFactory;
 
-    protected $fillable = ["link", "type"];
+    protected $fillable = ["link", "type","is_query_link"];
 
     protected function link(): Attribute
     {

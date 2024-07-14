@@ -2,10 +2,8 @@
 
 namespace App\Http\Requests;
 
-use App\Rules\UniqueDomainEndpoint;
 use App\Rules\ValidDomain;
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rule;
 
 class LinkUpdateRequest extends FormRequest
 {

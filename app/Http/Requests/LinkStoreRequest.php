@@ -26,6 +26,7 @@ class LinkStoreRequest extends FormRequest
         return [
             "link" => ["required","string","min:3","max:255", new ValidDomain, Rule::unique('links')],
             'type' => 'required|numeric|max:255|exists:account_types,id',
+            'is_query_link' => 'required|max:255',
         ];
     }
 }

@@ -25,7 +25,7 @@ class LinkInfoService
             $data['account_type_id'] = $account_type_id;
             $data['user_id'] = $user_id;
 
-            Validator::make($data, [
+            $validator = Validator::make($data, [
                 'account_type_id' => 'nullable|numeric|exists:account_types,id',
                 'user_id' => 'required|numeric|exists:users,id',
                 'ip_address' => 'required|max:255',
@@ -33,8 +33,11 @@ class LinkInfoService
                 'city' => 'required|max:255',
                 'state_name' => 'nullable|max:255',
                 'zip_code' => 'nullable|max:255',
-            ])->validate();
+            ]);
 
+            if($validator->fails()){
+                return $validator->errors();
+            }
 
             LinkInfo::create($data);
         }

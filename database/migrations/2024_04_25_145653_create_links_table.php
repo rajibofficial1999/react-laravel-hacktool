@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('link');
             $table->foreignId('type')->constrained('account_types')->cascadeOnDelete();
+            $table->boolean('is_query_link');
             $table->boolean('status')->default(true);
             $table->timestamps();
         });

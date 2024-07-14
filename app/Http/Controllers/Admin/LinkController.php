@@ -44,6 +44,12 @@ class LinkController extends Controller
     {
         $data = $request->validated();
 
+        if($data['is_query_link'] == 'yes'){
+            $data['is_query_link'] = true;
+        }else{
+            $data['is_query_link'] = false;
+        }
+
         Link::create($data);
 
         return redirect()->route('admin.links.viewLinks')->with('success','The link has successfully created');

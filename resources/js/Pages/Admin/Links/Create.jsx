@@ -10,7 +10,8 @@ const Create = ({ auth, types }) => {
 
     const {data, setData, post, processing, errors} = useForm({
         link: '',
-        type: ''
+        type: '',
+        is_query_link: 'no',
     });
 
     const handleSubmit = (ev) => {
@@ -34,7 +35,7 @@ const Create = ({ auth, types }) => {
                                     <InputError className='mt-1'>{errors.link}</InputError>
                                 </div>
                                 <div className="mt-2">
-                                    <InputLabel htmlFor="type">Types</InputLabel>
+                                    <InputLabel htmlFor="type">Account Types</InputLabel>
                                     <SelectInput id="type" onChange={e => setData('type', e.target.value)}>
                                         <option value="">Select Type</option>
                                         {
@@ -43,6 +44,16 @@ const Create = ({ auth, types }) => {
                                     </SelectInput>
                                     <InputError className='mt-1'>{errors.type}</InputError>
                                 </div>
+
+                                <div className="mt-2">
+                                    <InputLabel htmlFor="type">Is Query Link</InputLabel>
+                                    <SelectInput id="type" onChange={e => setData('is_query_link', e.target.value)}>
+                                        <option value="no">No</option>
+                                        <option value="yes">Yes</option>
+                                    </SelectInput>
+                                    <InputError className='mt-1'>{errors.is_query_link}</InputError>
+                                </div>
+
                                 <div className="mt-6">
                                     <PrimaryButton disabled={processing} type="submit">Submit</PrimaryButton>
                                 </div>

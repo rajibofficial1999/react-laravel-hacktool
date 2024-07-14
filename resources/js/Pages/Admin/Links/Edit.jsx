@@ -32,7 +32,6 @@ const Edit = ({ auth, types, link }) => {
                                     <InputLabel htmlFor="link">Link</InputLabel>
                                     <TextInput placeholder="example.com" id="link" value={data.link} onChange={e => setData('link', e.target.value)}/>
                                     <InputError className='mt-1'>{errors.link}</InputError>
-                                    {console.log(link.link)}
                                 </div>
                                 <div className="mt-2">
                                     <InputLabel htmlFor="type">Type</InputLabel>
