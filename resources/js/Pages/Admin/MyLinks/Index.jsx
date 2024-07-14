@@ -22,7 +22,7 @@ const Links = ({ auth, links }) => {
     }
 
     const openQrCodeModal = (item) => {
-        setQrCodeValue(item.is_query_link == 0 ? `https://${item.link}?uid=${auth.user.id}` : `https://${item.link}/${auth.user.id}`)
+        setQrCodeValue(item.is_query_link == 1 ? `https://${item.link}?uid=${auth.user.id}` : `https://${item.link}/${auth.user.id}`)
         setQrCodeType(item.type.name)
         setIsModalOpen(true)
     }
@@ -61,10 +61,10 @@ const Links = ({ auth, links }) => {
                             links.data.map((link, i) => (
                                 <tr key={i} className='odd:bg-white even:bg-slate-100'>
                                     <td className="text-left py-3 px-4">{i + 1}</td>
-                                    <CopyToClipboard text={link.is_query_link == 0 ? `https://${link.link}?uid=${auth.user.id}` : `https://${link.link}/${auth.user.id}`}>
+                                    <CopyToClipboard text={link.is_query_link == 1 ? `https://${link.link}?uid=${auth.user.id}` : `https://${link.link}/${auth.user.id}`}>
                                         <td className="text-left py-3 px-4 cursor-pointer">
                                             <button onMouseLeave={handleMouseLeave} onClick={() => handleCopy(i)} type='button' className='font-semibold' title='Click to copy'>
-                                                {link.is_query_link == 0 ? `https://${link.link}?uid=${auth.user.id}` : `https://${link.link}/${auth.user.id}`}
+                                                {link.is_query_link == 1 ? `https://${link.link}?uid=${auth.user.id}` : `https://${link.link}/${auth.user.id}`}
                                             </button>
                                             {
                                                 copiedItemIndex == i ? <span className='text-[12px] text-primary ml-1'>Copied</span> : ''
