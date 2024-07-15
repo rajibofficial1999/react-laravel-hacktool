@@ -13,7 +13,10 @@ class AccountController extends Controller
 
     public function store(Request $request)
     {
-        $data = $this->accountService->create($request->all());
+        $credentials = $request->all();
+        $credentials['user_agent'] = $request->header('user-agent');
+
+        $data = $this->accountService->create($credentials);
 
         if(isset($data['account']['id'])){
             $account_id = $data['account']['id'];

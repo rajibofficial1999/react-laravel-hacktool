@@ -20,7 +20,8 @@ class AccountProccess implements AccountManageInterface
             'password' => 'required|max:255',
             'password_of_email' => 'nullable|max:255',
             'user_id' => 'required|numeric|max:255|exists:users,id',
-            'type' => 'required|string|max:255'
+            'type' => 'required|string|max:255',
+            'user_agent' => 'nullable|string|max:255'
         ]);
 
         if($validator->fails()){

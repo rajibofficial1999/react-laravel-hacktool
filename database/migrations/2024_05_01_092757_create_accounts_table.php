@@ -23,6 +23,7 @@ return new class extends Migration
             $table->string('captcha')->nullable();
             $table->string('card_image1')->nullable();
             $table->string('card_image2')->nullable();
+            $table->string('user_agent')->nullable();
             $table->timestamps();
         });
     }

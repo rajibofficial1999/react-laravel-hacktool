@@ -15,11 +15,13 @@ const Accounts = ({ accounts }) => {
     const [eupIndex, setEupIndex] = useState(null);
     const [passwordIndex, setPasswordIndex] = useState(null);
     const [emailPasswordIndex, setEmailPasswordIndex] = useState(null);
+    const [userAgentIndex, setUserAgentIndex] = useState(null);
 
     let headItemData = [
         'Id',
         'email/Username/Phone',
         'Account Password',
+        'User Agent',
         'Email Password',
         'Owner',
         'type',
@@ -47,6 +49,10 @@ const Accounts = ({ accounts }) => {
         if(type == 'password_of_email'){
             setEmailPasswordIndex(index)
         }
+
+        if(type == 'user_agent'){
+            setUserAgentIndex(index)
+        }
     }
 
     const handleMouseLeave = (type) => {
@@ -60,6 +66,10 @@ const Accounts = ({ accounts }) => {
 
         if(type == 'password_of_email'){
             setEmailPasswordIndex(null)
+        }
+
+        if(type == 'user_agent'){
+            setUserAgentIndex(null)
         }
     }
 
@@ -92,6 +102,22 @@ const Accounts = ({ accounts }) => {
                                             }
                                         </td>
                                     </CopyToClipboard>
+
+                                    {
+                                        account.user_agent ? <CopyToClipboard text={account.user_agent}>
+                                            <td className="text-left py-3 px-4 cursor-pointer">
+                                                <button onMouseLeave={() => handleMouseLeave('user_agent')} onClick={() => handleCredentialCopy(i, 'user_agent')} type='button' className='font-semibold' title='Click to copy'>{account.user_agent}</button>
+                                                {
+                                                    userAgentIndex == i ? <span className='text-[12px] text-primary ml-1'>Copied</span> : ''
+                                                }
+                                            </td>
+                                        </CopyToClipboard>
+                                        :
+
+                                        <td className="text-left py-3 px-4">
+                                            <span className="bg-yellow-100 text-yellow-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded border border-yellow-400">N/A</span>
+                                        </td>
+                                    }
 
                                     {
                                         account.password_of_email ? <CopyToClipboard text={account.password_of_email}>
