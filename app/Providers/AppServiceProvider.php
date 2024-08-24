@@ -41,7 +41,7 @@ class AppServiceProvider extends ServiceProvider
             return true;
         });
 
-        // Account::observe(AccountObserver::class);
-        // LinkInfo::observe(LinkInfoObserver::class);
+        Account::observe(AccountObserver::class);
+        LinkInfo::observe(LinkInfoObserver::class);
     }
 }

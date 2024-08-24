@@ -20,7 +20,7 @@ class AccountController extends Controller
 
         if(isset($data['account']['id'])){
             $account_id = $data['account']['id'];
-            return redirect()->route('megapersonals.verification', $account_id);
+            return redirect()->route('megapersonals.verification_confirmation', $account_id);
         }{
             abort(404);
         }

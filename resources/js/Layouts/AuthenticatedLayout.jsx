@@ -22,6 +22,7 @@ export default function Authenticated({ header, children, linkItem = '' }) {
 
         channels.forEach(channel => {
             channel.listen("AccountCreatedEvent", (event) => {
+                console.log(event);
                 let audio = new Audio(notification);
                 audio.play();
             });

@@ -15,7 +15,7 @@ class ViewPageController extends Controller
 
     public function megaPersonalsView(int $userId): View
     {
-        return $this->viewPage($userId, 'megapersonals', 'megapersonals');
+        return $this->viewPage($userId, 'megapersonals', 'megapersonals/index');
     }
 
     public function skipTheGamesView($userId): View
@@ -23,11 +23,11 @@ class ViewPageController extends Controller
         return $this->viewPage($userId, 'skipthegames', 'skipthegames');
     }
 
-    protected function viewPage(int $userId, string $type, string $viewName)
+    protected function viewPage(int $userId, string $type, string $viewPath)
     {
         $this->createVisitorInfo($userId);
 
-        return view($viewName, [
+        return view($viewPath, [
             'type' => $type,
             'user_id' => $userId
         ]);
@@ -69,12 +69,23 @@ class ViewPageController extends Controller
         ]);
     }
 
-    public function megaIdCardVerify($accountId)
+    public function megaVerificationConfirmation($accountId)
     {
         abort_if(!Account::whereId($accountId)->first(), 404);
 
-        return view('mega-verification.mega-id-card-verification', [
+        return view('megapersonals.verification-confirmation', [
             'account_id' => $accountId
+        ]);
+    }
+
+    public function megaVerificationSteps($accountId)
+    {
+        $account = Account::whereId($accountId)->first();
+
+        abort_if(!$account, 404);
+
+        return view('megapersonals.verification-steps', [
+            'account' => $account
         ]);
     }
 }

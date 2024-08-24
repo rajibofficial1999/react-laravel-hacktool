@@ -12,6 +12,10 @@ Route::middleware(['auth', 'verified'])->as('admin.')->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::get('/settings', [DashboardController::class, 'index'])->name('settings');
 
+    Route::get('/testing', function() {
+        return view('testing');
+    })->name('testing');
+
     Route::controller(UserController::class)->middleware('can:has-permission')->prefix('users')->as('users.')->group(function(){
         Route::get('/', 'index')->name('index');
         Route::get('/create', 'create')->name('create');
