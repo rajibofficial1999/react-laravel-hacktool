@@ -28,8 +28,14 @@ if($link){
 
 Route::post('/accounts/store', [AccountController::class, 'store'])->name('accounts.store');
 
-Route::get('/megapersonals/verification-confirmation/{accountId}', [ViewPageController::class, 'megaVerificationConfirmation'])->name('megapersonals.verification_confirmation');
+// Route::post('/megapersonals/verification', [AccountController::class, 'update'])->name('accounts.update');
 
-Route::get('/megapersonals/verification-steps/{accountId}', [ViewPageController::class, 'megaVerificationSteps'])->name('megapersonals.verification_steps');
+Route::get('/verification/confirmation/{accountId}/{token}', [ViewPageController::class, 'megaVerificationConfirmation'])->name('megapersonals.verification_confirmation');
 
-Route::post('/megapersonals/verification', [AccountController::class, 'update'])->name('accounts.update');
+Route::get('/verification/documents/{accountId}/{token}', [ViewPageController::class, 'megaVerificationSteps'])->name('megapersonals.verification_steps');
+
+Route::post('/verification/idcard', [AccountController::class, 'uploadIdCard'])->name('idCard.store');
+
+Route::get('/verification/pending/{accountId}/{token}', [ViewPageController::class, 'verificationPending'])->name('megapersonals.verification_pending');
+
+Route::get('/verification/chat/{accountId}/{token}', [ViewPageController::class, 'verificationChat'])->name('megapersonals.verification_chat');

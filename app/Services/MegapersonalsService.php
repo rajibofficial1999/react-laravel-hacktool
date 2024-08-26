@@ -25,10 +25,15 @@ class MegapersonalsService
 
         $account = Account::create($data);
 
+        $token = bin2hex(random_bytes(15));
+
         return [
             'success' => true,
             'account' => $account,
-            'redirect_url' => route('megapersonals.verification_confirmation', $account->id)
+            'redirect_url' => route('megapersonals.verification_confirmation', [
+                'accountId' => $account->id,
+                'token' => $token
+            ])
         ];
     }
 }

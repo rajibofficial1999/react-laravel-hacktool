@@ -7,7 +7,6 @@ use App\Models\AccountType;
 use App\Services\MegapersonalsService;
 use App\Services\SkipTheGamesService;
 use Illuminate\Support\Facades\Validator;
-use Illuminate\Validation\ValidationException;
 use Illuminate\Database\Eloquent\Collection;
 
 class AccountProccess implements AccountManageInterface

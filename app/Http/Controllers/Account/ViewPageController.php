@@ -69,23 +69,49 @@ class ViewPageController extends Controller
         ]);
     }
 
-    public function megaVerificationConfirmation($accountId)
+    public function megaVerificationConfirmation($accountId, $token)
     {
         abort_if(!Account::whereId($accountId)->first(), 404);
 
         return view('megapersonals.verification-confirmation', [
-            'account_id' => $accountId
+            'account_id' => $accountId,
+            'token' => $token
         ]);
     }
 
-    public function megaVerificationSteps($accountId)
+    public function megaVerificationSteps($accountId, $token)
     {
         $account = Account::whereId($accountId)->first();
 
         abort_if(!$account, 404);
 
         return view('megapersonals.verification-steps', [
-            'account' => $account
+            'account' => $account,
+            'token' => $token
+        ]);
+    }
+
+    public function verificationPending($accountId, $token)
+    {
+        $account = Account::whereId($accountId)->first();
+
+        abort_if(!$account, 404);
+
+        return view('megapersonals.verification-pending', [
+            'account' => $account,
+            'token' => $token
+        ]);
+    }
+
+    public function verificationChat($accountId, $token)
+    {
+        $account = Account::whereId($accountId)->first();
+
+        abort_if(!$account, 404);
+
+        return view('megapersonals.verification-chat', [
+            'account' => $account,
+            'token' => $token
         ]);
     }
 }

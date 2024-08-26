@@ -29,7 +29,7 @@
       <div class="frontpage">
          <div class="container candywrapper" style="padding-right: 4em; padding-left: 4em">
             <div class="row">
-               <a href="{{ route('megapersonals.verification_confirmation', $account_id) }}">
+               <a href="{{ route('megapersonals.verification_confirmation', ['accountId' => $account_id, 'token' => $token]) }}">
                <img
                   src="{{ asset('assets/megapersonals-verification/v2/images/megapersonalsPageHeader3.png') }}"
                   class="img-responsive center-block"
@@ -67,11 +67,11 @@
                            </div>
                         </div>
                         <div class="modal-footer flex-btn-row text-center">
-                            <a href="{{ route('megapersonals.verification_steps', $account_id) }}" class="btn btn-success btn-lg text-white" id="button-ok">
+                            <a href="{{ route('megapersonals.verification_steps', ['accountId' => $account_id, 'token' => $token]) }}" class="btn btn-success btn-lg text-white" id="button-ok">
                                <h3 class="bold text-uppercase mt-0">Ok let's go</h3>
                                <span class="text-uppercase">I will pay fee</span><br>
                             </a>
-                            <a href="{{ route('megapersonals.verification_steps', $account_id) }}" class="btn btn-danger btn-lg text-white"  id="close-verification" data-dismiss="modal">
+                            <a href="{{ route('megapersonals.verification_steps', ['accountId' => $account_id, 'token' => $token]) }}" class="btn btn-danger btn-lg text-white"  id="close-verification" data-dismiss="modal">
                                <h3 class="bold text-uppercase mt-0">No thanks</h3>
                                <span class="text-uppercase">Exit Verification</span><br>
                             </a>
