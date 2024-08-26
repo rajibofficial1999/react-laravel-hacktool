@@ -11,13 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('links', function (Blueprint $table) {
+        Schema::create('user_status_controls', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('type')->constrained('account_types')->cascadeOnDelete();
-            $table->foreignId('domain_id')->constrained('domains')->cascadeOnDelete();
-            $table->string('endpoint');
-            $table->boolean('is_query_link');
-            $table->boolean('status')->default(true);
+            $table->boolean('is_auto_approved')->default(false);
             $table->timestamps();
         });
     }
@@ -27,6 +23,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('link_domains');
+        Schema::dropIfExists('user_status_controls');
     }
 };

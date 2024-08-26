@@ -1,7 +1,6 @@
 import { Link, usePage } from '@inertiajs/react';
 import { cn } from '@/lib/utils';
 import { AcademicCapIcon, ArrowLeftCircleIcon, BanknotesIcon, Bars3BottomLeftIcon, BuildingLibraryIcon, Cog8ToothIcon, LinkIcon, UserGroupIcon } from '@heroicons/react/24/solid'
-// import { dropDownLinks } from './NavDropDownLink';
 import { ListBulletIcon } from '@heroicons/react/20/solid';
 import { useEffect, useState } from 'react';
 
@@ -29,15 +28,15 @@ const SidebarLink = ({additionalClasses}) => {
             onlyAdminLink: false
         },
         {
-            name: "My Links",
+            name: "Links",
             icon: <LinkIcon/>,
             routeName: "admin.links.index",
             onlyAdminLink: false
         },
         {
-            name: "Links",
+            name: "Domains",
             icon: <ListBulletIcon/>,
-            routeName: "admin.links.viewLinks",
+            routeName: "admin.domains.index",
             onlyAdminLink: true
         },
         {

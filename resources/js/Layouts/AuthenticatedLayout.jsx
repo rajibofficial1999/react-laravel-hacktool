@@ -65,7 +65,7 @@ export default function Authenticated({ header, children, linkItem = '' }) {
                                 }
                             )}
                         >
-                            <NavDropDownLink/>
+                            <NavDropDownLink auth={user}/>
                         </div>
                     </div>
                 </div>

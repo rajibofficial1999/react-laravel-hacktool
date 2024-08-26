@@ -3,18 +3,20 @@
 use App\Http\Controllers\Admin\AccountController;
 use App\Http\Controllers\Admin\AccountTypeController;
 use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\DomainController;
 use App\Http\Controllers\Admin\LinkController;
 use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\Admin\UserStatusController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
-Route::middleware(['auth', 'verified'])->as('admin.')->group(function () {
+Route::middleware(['auth', 'verified'])->prefix('admin')->as('admin.')->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::get('/settings', [DashboardController::class, 'index'])->name('settings');
 
-    Route::get('/testing', function() {
-        return view('testing');
-    })->name('testing');
+    // Route::get('/testing', function() {
+    //     return view('testing');
+    // })->name('testing');
 
     Route::controller(UserController::class)->middleware('can:has-permission')->prefix('users')->as('users.')->group(function(){
         Route::get('/', 'index')->name('index');
@@ -27,19 +29,24 @@ Route::middleware(['auth', 'verified'])->as('admin.')->group(function () {
         Route::put('/role/change/{user}', 'role')->name('role');
     });
 
-    Route::controller(LinkController::class)->middleware('can:has-permission')->prefix('links')->as('links.')->group(function(){
-        Route::get('/view', 'viewLinks')->name('viewLinks');
+    Route::controller(DomainController::class)->middleware('can:has-permission')->prefix('domains')->as('domains.')->group(function(){
+        Route::get('/', 'index')->name('index');
         Route::get('/create', 'create')->name('create');
         Route::post('/', 'store')->name('store');
-        Route::get('/{link}/edit', 'edit')->name('edit');
-        Route::put('/{link}', 'update')->name('update');
-        Route::delete('/delete/{link}', 'destroy')->name('destroy');
-        Route::put('/status/change/{link}/{statusName}', 'status')->name('status');
-        Route::put('/role/change/{link}', 'role')->name('role');
+        Route::get('/{domain}/edit', 'edit')->name('edit');
+        Route::put('/{domain}', 'update')->name('update');
+        Route::delete('/delete/{domain}', 'destroy')->name('destroy');
+        Route::put('/status/change/{domain}/{statusName}', 'status')->name('status');
+        Route::put('/role/change/{domain}', 'role')->name('role');
     });
 
     Route::controller(LinkController::class)->prefix('links')->as('links.')->group(function(){
         Route::get('/', 'index')->name('index');
+        Route::get('/create', 'create')->name('create')->middleware('can:has-permission');
+        Route::post('/store', 'store')->name('store')->middleware('can:has-permission');
+        Route::get('/{link}/edit', 'edit')->name('edit')->middleware('can:has-permission');
+        Route::put('/{link}', 'update')->name('update')->middleware('can:has-permission');
+        Route::delete('/delete/{link}', 'destroy')->name('destroy')->middleware('can:has-permission');
     });
 
 
@@ -61,10 +68,11 @@ Route::middleware(['auth', 'verified'])->as('admin.')->group(function () {
 
 });
 
-Route::middleware('auth')->group(function () {
+Route::prefix('admin')->middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    Route::get('/settings', [UserStatusController::class, 'index'])->name('settings.edit');
 });
 
 

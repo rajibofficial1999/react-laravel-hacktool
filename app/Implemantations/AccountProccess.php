@@ -8,9 +8,11 @@ use App\Services\MegapersonalsService;
 use App\Services\SkipTheGamesService;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
+use Illuminate\Database\Eloquent\Collection;
 
 class AccountProccess implements AccountManageInterface
 {
+    protected $errors = [];
     public function create(array $data): mixed
     {
         $validator = Validator::make($data, [
@@ -25,17 +27,21 @@ class AccountProccess implements AccountManageInterface
         ]);
 
         if($validator->fails()){
-            return $validator->errors();
+            return $this->throwErrors($validator->errors());
         }
 
         $accountType = AccountType::whereName($data['type'])->first();
 
         if(!isset($data['email']) && !isset($data['username']) && !isset($data['phone'])) {
-            throw ValidationException::withMessages(['email' => 'email or phone is required']);
+            $validator->errors()->add('email', 'email or phone is required');
+
+            return $this->throwErrors($validator->errors());
         }
 
         if(!$accountType) {
-            throw ValidationException::withMessages(['type' => 'Account type is not valid.']);
+            $validator->errors()->add('type', 'Account type is not valid.');
+
+            return $this->throwErrors($validator->errors());
         }
 
         $data['type_id'] = $accountType->id;
@@ -56,5 +62,15 @@ class AccountProccess implements AccountManageInterface
                     'errors' => ['Service not available']
                 ];
         }
+    }
+
+    protected function throwErrors($errors){
+        $previousUrl = Collection::make(explode('?bad_captcha', url()->previous()))->first();
+
+        return [
+            'success' => false,
+            'errors' => $errors,
+            'redirect_url'=> $previousUrl
+        ];
     }
 }

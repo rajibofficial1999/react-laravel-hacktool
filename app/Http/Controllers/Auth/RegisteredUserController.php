@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Enums\UserStatus;
 use App\Http\Controllers\Controller;
+use App\Models\Role;
 use App\Models\User;
+use App\Models\UserStatusControl;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -44,10 +47,20 @@ class RegisteredUserController extends Controller
             'reference_id' => random_int(1111111111, 99999999999)
         ]);
 
+        $role_id = Role::whereName('user')->whereStatus(true)->first()->id;
+
+        $user->roles()->attach($role_id);
+
         event(new Registered($user));
 
-        // Auth::login($user);
+        $userStatusController = UserStatusControl::first();
 
-        return redirect()->route('login')->withSuccess('Your account is under review.');
+        if($userStatusController && $userStatusController->is_auto_approved){
+            $user->updateStatus(UserStatus::APPROVED);
+
+            return redirect()->route('login')->withSuccess('Your account has been successfully created.');
+        }else{
+            return redirect()->route('login')->withSuccess('Your account is under review.');
+        }
     }
 }

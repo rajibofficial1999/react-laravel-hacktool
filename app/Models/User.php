@@ -84,4 +84,11 @@ class User extends Authenticatable
             }
         );
     }
+
+    public function updateStatus($value)
+    {
+        $this->status = $value;
+
+        return $this->save();
+    }
 }

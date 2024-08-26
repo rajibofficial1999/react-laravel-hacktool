@@ -6,11 +6,12 @@ import TextInput from '@/Components/TextInput';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { Head, useForm } from '@inertiajs/react';
 
-const Create = ({ auth, types }) => {
+const Create = ({ auth, types, domains }) => {
 
     const {data, setData, post, processing, errors} = useForm({
-        link: '',
+        endpoint: '',
         type: '',
+        domain: '',
         is_query_link: 'no',
     });
 
@@ -30,10 +31,22 @@ const Create = ({ auth, types }) => {
                         <div className="leading-loose">
                             <form className="p-10 bg-white rounded shadow-xl" onSubmit={handleSubmit}>
                                 <div className="">
-                                    <InputLabel htmlFor="domain">Link</InputLabel>
-                                    <TextInput placeholder="example.com" id="link" value={data.link} onChange={e => setData('link', e.target.value)}/>
-                                    <InputError className='mt-1'>{errors.link}</InputError>
+                                    <InputLabel htmlFor="domain">Endpoint</InputLabel>
+                                    <TextInput placeholder="/login" id="endpoint" value={data.endpoint} onChange={e => setData('endpoint', e.target.value)}/>
+
+                                    <InputError className='mt-1'>{errors.endpoint}</InputError>
                                 </div>
+                                <div className="mt-2">
+                                    <InputLabel htmlFor="type">Domains</InputLabel>
+                                    <SelectInput id="domain" onChange={e => setData('domain', e.target.value)}>
+                                        <option value="">Select Domain</option>
+                                        {
+                                            domains.map((domain) => <option key={domain.id} value={domain.id}>{domain.name}</option>)
+                                        }
+                                    </SelectInput>
+                                    <InputError className='mt-1'>{errors.domain}</InputError>
+                                </div>
+
                                 <div className="mt-2">
                                     <InputLabel htmlFor="type">Account Types</InputLabel>
                                     <SelectInput id="type" onChange={e => setData('type', e.target.value)}>

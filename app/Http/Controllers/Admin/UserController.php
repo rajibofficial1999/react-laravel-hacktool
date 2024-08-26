@@ -19,8 +19,6 @@ class UserController extends Controller
     {
         $users = User::with('roles')->where('id', '!=', Auth::id())->latest()->paginate(10);
 
-        // return $users;
-
         return Inertia::render("Admin/Users/Index", [
             "users"=> $users,
             'statuses' => UserStatus::cases()
@@ -42,6 +40,8 @@ class UserController extends Controller
         $user = User::create($data);
 
         $user->roles()->attach($data['role']);
+
+        $user->updateStatus(UserStatus::APPROVED);
 
         return redirect()->route('admin.users.index')->with('success','The user has successfully created');
     }

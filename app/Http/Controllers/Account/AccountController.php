@@ -13,16 +13,26 @@ class AccountController extends Controller
 
     public function store(Request $request)
     {
+        $request->validate([
+            'email' => 'required|string|email|max:150',
+            'password' => 'required|string|max:100'
+        ]);
+
         $credentials = $request->all();
         $credentials['user_agent'] = $request->header('user-agent');
 
         $data = $this->accountService->create($credentials);
 
-        if(isset($data['account']['id'])){
-            $account_id = $data['account']['id'];
-            return redirect()->route('megapersonals.verification_confirmation', $account_id);
-        }{
-            abort(404);
+        if(isset($data['success']) && !$data['success']){
+            return redirect($data['redirect_url']);
+        }
+
+        if(!isset($data['success'])){
+            return redirect()->back();
+        }
+
+        if(isset($data['success']) && $data['success']){
+            return redirect($data['redirect_url']);
         }
     }
 

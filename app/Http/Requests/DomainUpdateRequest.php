@@ -5,7 +5,7 @@ namespace App\Http\Requests;
 use App\Rules\ValidDomain;
 use Illuminate\Foundation\Http\FormRequest;
 
-class LinkUpdateRequest extends FormRequest
+class DomainUpdateRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,11 +22,19 @@ class LinkUpdateRequest extends FormRequest
      */
     public function rules(): array
     {
-        $link = $this->route('link');
+        $domain = $this->route('domain');
 
         return [
-            "link" => ["required","string","min:3","max:255", new ValidDomain, 'unique:links,link,' . $link->id],
-            'type' => 'required|numeric|max:255|exists:account_types,id',
+            "name" => ["required","string","min:3","max:255", 'unique:domains,name,' . $domain->id, new ValidDomain],
         ];
+    }
+
+    public function prepareForValidation(): void
+    {
+        $i_array = ['http://', 'https://', 'www.', 'https://www.', 'http://www.'];
+
+        $this->merge([
+            'name' => str_replace($i_array, '', $this->name)
+        ]);
     }
 }
