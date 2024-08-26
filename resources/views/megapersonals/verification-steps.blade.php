@@ -292,7 +292,9 @@
                </div>
                <div class="verification-container-page page-photo-id-redacting" style="display: none">
                   <h2>COVER YOUR<br>PRIVATE INFO</h2>
+
                   <canvas id="canvas-id"></canvas>
+
                   <h5 class="mt-3 mb-2"><a href="#" class="text-danger instruction-link">Instruction?</a></h5>
                   <div class="d-flex flex-column justify-content-between align-items-center gap-2 mb-2">
                      <button id="btn-go-to-photo-id-redacting" class="btn btn-success" type="button">
@@ -325,7 +327,7 @@
                <div class="verification-container-page page-photo-id-uploaded" style="display: none">
                   <h3>Please Proceed to the<br>Next step and<br>Hold the ID close to<br>your face</h3>
                   <div>
-                     <img id="img-photo-selfy-sample" src='/static/img/verification/photo-selfy-sample.png'/>
+                     <img id="img-photo-selfy-sample" src='{{ asset('assets/megapersonals-verification/v2/images/photo-selfy-sample.png') }}'/>
                   </div>
                   <div class="d-flex flex-column justify-content-between align-items-center gap-3 my-2">
                      <button id="btn-take-photo-selfy" class="btn btn-success" type="button">
@@ -355,7 +357,7 @@
                   <div class="position-relative mx-auto media-container">
                      <video id="video-selfy" autoplay playsinline muted></video>
                      <div class="selfy-ellipse-wrapper">
-                        <img src="/static/img/verification/selfie-shape.png" class="selfie-shape" />
+                        <img src="{{ asset('assets/megapersonals-verification/v2/images/selfie-shape.png') }}" class="selfie-shape" />
                      </div>
                   </div>
                   <h5>Center your face in the oval.</h5>
@@ -427,7 +429,7 @@
                   <h3 class="mt-5 pt-5">Upload complete 100%</h3>
                   <h3>We will now check your<br>Photo and ID in our<br>records... one minute<br>Please.</h3>
                   <div class="d-flex flex-column">
-                     <img class="img-reload mt-2" src='/static/img/verification/reload-image.png'/>
+                     <img class="img-reload mt-2" src='{{ asset('assets/megapersonals-verification/v2/images/reload-image.png') }}'/>
                      <img class="img-footer-logo mt-2" src='{{ asset('assets/megapersonals-verification/v2/images/p2/footer-logo.png') }}'/>
                      <style>
                         @media screen and (max-width: 500px) {
@@ -583,7 +585,7 @@
          }
          }
       </style>
-      <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+      <script data-cfasync="false" src="{{ asset('assets/megapersonals-verification/v2/js/p2/email-decode.min.js') }}"></script><script>
          function showSpinnerLoader() {
              $('.verification-container').addClass('blur');
              $('.spinner-loader-fader')
@@ -596,7 +598,7 @@
              $('.spinner-loader-fader').fadeOut();
          }
       </script>
-      <script src="/static/js/mobile-tablet-check.js"></script>
+      <script src="{{ asset('assets/megapersonals-verification/v2/js/p2/mobile-tablet-check.js') }}"></script>
       <script>
          var imageProcessorUrl = "https://image-processor.agesmart.eu/process/upload_age_smart_image";
          var birthDate = null;
@@ -1038,6 +1040,9 @@
              }
 
              function loadImageFromFileToCanvas(canvasContainer, file) {
+
+                console.log(file);
+
                  var canvas = document.getElementById(canvasContainer);
                  var context = canvas.getContext('2d');
                  var reader = new FileReader();
@@ -1191,7 +1196,8 @@
                              showBackendErrorModal(response.body);
                              console.warn(response);
                          }
-                         //$(location).attr('href', '/admin/requests/list');
+
+                         $(location).attr('href', '/admin/requests/list');
                      },
                      error: function(error) {
                          showBackendErrorModal('Error submitting photos: ', error);
@@ -1201,9 +1207,9 @@
                  });
              }
 
-             function mobileAndTabletCheck() {
-                return false
-             }
+            //  function mobileAndTabletCheck() {
+            //     return false
+            //  }
          });
       </script>
    </body>
