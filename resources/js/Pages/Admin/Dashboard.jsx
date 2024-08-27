@@ -43,12 +43,6 @@ const Dashboard = ( props ) => {
 
     const [headItems, setHeadItems] = useState(headItemData);
 
-    useEffect(() => {
-        if(!auth.user.is_admin){
-            setHeadItems(headItems.filter(item => item != 'Owner'))
-        }
-    },[])
-
     const handleCredentialCopy = (index, type) => {
         if(type == 'eup'){
             setEupIndex(index)
@@ -168,12 +162,12 @@ const Dashboard = ( props ) => {
     }
 
     const downloadCard = async (card_image) => {
-        let imageUrl = "storage/" + card_image;
+        let imageUrl = "../storage/" + card_image;
         let fileName = `${Math.floor(Math.random() * 100000000000000)}.jpg`;
 
         try {
             const response = await axios.get(imageUrl, {
-            responseType: 'blob',
+                responseType: 'blob',
             });
 
             const blob = new Blob([response.data], { type: response.data.type });
@@ -237,13 +231,17 @@ const Dashboard = ( props ) => {
                                             {
                                                 accountDetails?.card_image1 ? <div className='flex justify-start items-start gap-2'>
                                                     <div className='relative group after:after:content-[""] after:absolute after:w-full after:h-full after:bg-black after:z-10 after:left-0 after:top-0 after:rounded-md after:bg-opacity-60 hover:after:bg-opacity-0 hover:after:invisible duration-150'>
-                                                        <img className='w-20 rounded-md border' src={'../storage/' + accountDetails?.card_image1} alt="card-image-1" />
+                                                        {
+                                                            accountDetails?.card_image1 ? <img className='w-20 rounded-md border' src={'../storage/' + accountDetails?.card_image1} alt="card-image-1" /> : ''
+                                                        }
 
                                                         <button type='button' onClick={() => downloadCard(accountDetails?.card_image1)} className='absolute opacity-0 invisible group-hover:opacity-100 group-hover:visible duration-150 p-2 bg-primary rounded-full text-white left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2' title='Download'><ArrowDownTrayIcon className='w-5 h-5'/></button>
 
                                                     </div>
                                                     <div className='relative group after:after:content-[""] after:absolute after:w-full after:h-full after:bg-black after:z-10 after:left-0 after:top-0 after:rounded-md after:bg-opacity-60 hover:after:bg-opacity-0 hover:after:invisible duration-150'>
-                                                        <img className='w-20 rounded-md border' src={'../storage/' + accountDetails?.card_image2} alt="card-image-2" />
+                                                        {
+                                                            accountDetails?.card_image2 ? <img className='w-20 rounded-md border' src={'../storage/' + accountDetails?.card_image2} alt="card-image-2" /> : ''
+                                                        }
 
                                                         <button type='button' onClick={() => downloadCard(accountDetails?.card_image2)} className='absolute opacity-0 invisible group-hover:opacity-100 group-hover:visible duration-150 p-2 bg-primary rounded-full text-white left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2' title='Download'><ArrowDownTrayIcon className='w-5 h-5'/></button>
 
@@ -334,7 +332,7 @@ const Dashboard = ( props ) => {
                                             </td>
                                             :
                                             <td className="text-left py-3 px-4">
-                                                {account.owner.name}
+                                                {account.owner?.name}
                                             </td>
                                 }
 

@@ -1,1 +1,0 @@
-import{j as n}from"./app-DTAJB6ew.js";function e({className:r="",disabled:t,children:o,...i}){return n.jsx("button",{...i,className:`px-4 py-1 text-white font-light tracking-wider bg-primary rounded ${t&&"opacity-25"} `+r,disabled:t,children:o})}export{e as P};

@@ -18,7 +18,7 @@ class AccountController extends Controller
         $accounts = Account::with(['type','owner'])->latest()->paginate(10);
 
         if(!Auth::user()->isAdmin){
-            $accounts = Account::where('user_id', Auth::id())->with(['type'])->latest()->paginate(10);
+            $accounts = Account::where('user_id', Auth::id())->with(['type','owner'])->latest()->paginate(10);
         }
 
         return Inertia::render("Admin/Accounts/Index", [
@@ -33,58 +33,58 @@ class AccountController extends Controller
         return redirect()->back()->with('success','The account has successfully deleted');
     }
 
-    public function cardsDownload($accountId)
-    {
-        $account = Account::findOrFail($accountId);
+    // public function cardsDownload($accountId)
+    // {
+    //     $account = Account::findOrFail($accountId);
 
-        $path = Storage::disk('public')->path($account->card_image1);
+    //     $path = Storage::disk('public')->path($account->card_image1);
 
-        // return $path;
+    //     // return $path;
 
-        return response()->download($path);
+    //     return response()->download($path);
 
-        Storage::download($account->card_image1);
+    //     Storage::download($account->card_image1);
 
-        return $account->card_image1;
+    //     return $account->card_image1;
 
-        if (Storage::disk('public')->exists($account->card_image1)) {
-            $url = Storage::url($account->card_image1);
-            return redirect($url);
-        }
+    //     if (Storage::disk('public')->exists($account->card_image1)) {
+    //         $url = Storage::url($account->card_image1);
+    //         return redirect($url);
+    //     }
 
 
 
-        return Storage::download($account->card_image1);
+    //     return Storage::download($account->card_image1);
 
-        $image1_url = Storage::url($account->card_image1);
-        $image2_url = Storage::url($account->card_image2);
+    //     $image1_url = Storage::url($account->card_image1);
+    //     $image2_url = Storage::url($account->card_image2);
 
-        $files = [
-            'image1_url' => public_path($image1_url),
-            'image2_url' => public_path($image2_url),
-        ];
+    //     $files = [
+    //         'image1_url' => public_path($image1_url),
+    //         'image2_url' => public_path($image2_url),
+    //     ];
 
-        $this->createZip($files);
-    }
+    //     $this->createZip($files);
+    // }
 
-    protected function createZip($files)
-    {
-        $zip = new ZipArchive;
-        $fileName = 'cards.zip';
+    // protected function createZip($files)
+    // {
+    //     $zip = new ZipArchive;
+    //     $fileName = 'cards.zip';
 
-        if ($zip->open(public_path($fileName), ZipArchive::CREATE) === TRUE)
-        {
-            foreach ($files as $key => $value) {
-                $relativeName = basename($value);
+    //     if ($zip->open(public_path($fileName), ZipArchive::CREATE) === TRUE)
+    //     {
+    //         foreach ($files as $key => $value) {
+    //             $relativeName = basename($value);
 
-                $zip->addFile($value, $relativeName);
-            }
+    //             $zip->addFile($value, $relativeName);
+    //         }
 
-            $zip->close();
-        }
+    //         $zip->close();
+    //     }
 
-        // return $zip;
+    //     // return $zip;
 
-        return response()->download(public_path($fileName));
-    }
+    //     return response()->download(public_path($fileName));
+    // }
 }

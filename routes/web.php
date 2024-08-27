@@ -62,7 +62,7 @@ Route::middleware(['auth', 'verified'])->prefix('admin')->as('admin.')->group(fu
 
     Route::controller(AccountController::class)->prefix('accounts')->as('accounts.')->group(function(){
         Route::get('/', 'index')->name('index');
-        Route::get('/download-cards/{accountId}', 'cardsDownload')->name('cards.download');
+        // Route::get('/download-cards/{accountId}', 'cardsDownload')->name('cards.download');
         Route::delete('/delete/{account}', 'destroy')->name('destroy')->middleware('can:has-action-permission, account.id');
     });
 

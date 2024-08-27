@@ -16,10 +16,7 @@ class DashboardData
         $accounts = Account::when(!$user->isAdmin, function($query) use ($user) {
                                 return $query->where("user_id", $user->id);
                             })
-                            ->when($user->isAdmin, function($query){
-                                return $query->with('owner');
-                            })
-                            ->with(['type'])
+                            ->with(['type', 'owner'])
                             ->latest()
                             ->take(5)
                             ->get();
