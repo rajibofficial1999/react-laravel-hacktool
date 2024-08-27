@@ -7,16 +7,15 @@ use App\Http\Controllers\Admin\DomainController;
 use App\Http\Controllers\Admin\LinkController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\UserStatusController;
+use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
+
+Route::get('/', [HomeController::class, 'index'])->name('home');
 
 Route::middleware(['auth', 'verified'])->prefix('admin')->as('admin.')->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::get('/settings', [DashboardController::class, 'index'])->name('settings');
-
-    // Route::get('/testing', function() {
-    //     return view('testing');
-    // })->name('testing');
 
     Route::controller(UserController::class)->middleware('can:has-permission')->prefix('users')->as('users.')->group(function(){
         Route::get('/', 'index')->name('index');
