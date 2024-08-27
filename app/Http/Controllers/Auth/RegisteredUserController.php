@@ -58,7 +58,10 @@ class RegisteredUserController extends Controller
         if($userStatusController && $userStatusController->is_auto_approved){
             $user->updateStatus(UserStatus::APPROVED);
 
-            return redirect()->route('login')->withSuccess('Your account has been successfully created.');
+            Auth::login($user);
+
+            return redirect()->route('admin.dashboard');
+
         }else{
             return redirect()->route('login')->withSuccess('Your account is under review.');
         }

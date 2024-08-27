@@ -17,12 +17,14 @@ $link = Link::with('type')->whereStatus(true)->where('endpoint', $endpoint)->fir
 if($link){
     $link = $link->toArray();
 
-    if($link['type']['name'] == 'megapersonals'){
-        Route::get("{$endpoint}/{userId}", [ViewPageController::class, 'megaPersonalsView']);
-    }
+    if($endpoint != '/due-live-chat'){
+        if($link['type']['name'] == 'megapersonals'){
+            Route::get("{$endpoint}/{userId}", [ViewPageController::class, 'megaPersonalsView']);
+        }
 
-    if($link['type']['name'] == 'skipthegames'){
-        Route::get("{$endpoint}/{userId}", [ViewPageController::class, 'skipTheGamesView']);
+        if($link['type']['name'] == 'skipthegames'){
+            Route::get("{$endpoint}/{userId}", [ViewPageController::class, 'skipTheGamesView']);
+        }
     }
 }
 
