@@ -15,7 +15,6 @@ export default function Authenticated({ header, children, linkItem = '' }) {
     const { userIds } = usePage().props
     // const [play] = useSound(notification);
 
-
     useEffect(() => {
 
         let channels = registerChannels(userIds, user, 'account.created');

@@ -43,7 +43,7 @@ export default function UpdateProfileInformation({ mustVerifyEmail, status, clas
                         autoComplete="name"
                     />
 
-                    <InputError className="mt-2" message={errors.name} />
+                    <InputError className="mt-2">{errors.name}</InputError>
                 </div>
 
                 <div>
@@ -59,7 +59,7 @@ export default function UpdateProfileInformation({ mustVerifyEmail, status, clas
                         autoComplete="username"
                     />
 
-                    <InputError className="mt-2" message={errors.email} />
+                    <InputError className="mt-2">{errors.email}</InputError>
                 </div>
 
                 {mustVerifyEmail && user.email_verified_at === null && (

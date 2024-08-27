@@ -11,10 +11,12 @@ import CopyToClipboard from 'react-copy-to-clipboard';
 import { Dialog } from '@headlessui/react';
 import axios from 'axios';
 import { saveAs } from 'file-saver';
+import SuccessAlert from '@/Components/SuccessAlert';
 
 const Accounts = ({ accounts }) => {
 
     const { auth } = usePage().props
+    const {successMessage} = usePage().props.meta
 
     const [eupIndex, setEupIndex] = useState(null);
     const [passwordIndex, setPasswordIndex] = useState(null);
@@ -180,6 +182,9 @@ const Accounts = ({ accounts }) => {
             </HeadlessModal>
 
             <div className="w-full mt-6">
+
+                <SuccessAlert>{successMessage}</SuccessAlert>
+
                 <div className="bg-white">
                     <DataTable headItems={headItems}>
                         {

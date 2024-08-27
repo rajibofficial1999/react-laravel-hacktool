@@ -1,6 +1,6 @@
 import DataTable from '@/Components/Table';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
-import { Head, Link } from '@inertiajs/react';
+import { Head, Link, usePage } from '@inertiajs/react';
 import { useState } from 'react';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import {QRCodeSVG} from 'qrcode.react';
@@ -9,8 +9,11 @@ import { Dialog, Menu } from '@headlessui/react';
 import DropDownMenu from '@/Components/DropDownMenu';
 import { PencilSquareIcon, TrashIcon } from '@heroicons/react/20/solid';
 import { cn } from '@/lib/utils';
+import SuccessAlert from '@/Components/SuccessAlert';
 
 const Links = ({ auth, links }) => {
+
+    const {successMessage} = usePage().props.meta
 
     const [copiedItemIndex, setCopiedItemIndex] = useState(null);
     let [isModalOpen, setIsModalOpen] = useState(false)
@@ -37,7 +40,6 @@ const Links = ({ auth, links }) => {
         'type',
         'Action',
     ];
-    // auth.user.is_admin
     return (
         <AuthenticatedLayout
             header='Links'
@@ -62,6 +64,9 @@ const Links = ({ auth, links }) => {
             </HeadlessModal>
 
             <div className="w-full mt-6">
+
+            <SuccessAlert>{successMessage}</SuccessAlert>
+
                 <div className="bg-white tableResponsive">
                     <DataTable headItems={headItems}>
                         {

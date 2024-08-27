@@ -37,7 +37,7 @@ export default function ForgotPassword({ status }) {
                     onChange={(e) => setData('email', e.target.value)}
                 />
 
-                <InputError message={errors.email} className="mt-2" />
+                <InputError className="mt-2">{errors.email}</InputError>
 
                 <div className="flex items-center justify-end mt-4">
                     <PrimaryButton className="ms-4" disabled={processing}>

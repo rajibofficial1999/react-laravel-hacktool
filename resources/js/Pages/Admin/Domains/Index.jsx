@@ -3,9 +3,12 @@ import DataTable from '@/Components/Table';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { Menu } from '@headlessui/react';
 import { PencilIcon, TrashIcon } from '@heroicons/react/24/solid';
-import { Head, Link } from '@inertiajs/react';
+import { Head, Link, usePage } from '@inertiajs/react';
+import SuccessAlert from '@/Components/SuccessAlert';
 
 const Links = ({ auth, domains }) => {
+
+    const {successMessage} = usePage().props.meta
 
     const headItems = [
         'Id',
@@ -23,6 +26,9 @@ const Links = ({ auth, domains }) => {
             <Head title="Domains" />
 
             <div className="w-full mt-6">
+
+            <SuccessAlert>{successMessage}</SuccessAlert>
+
                 <div className="bg-white">
                     <DataTable headItems={headItems}>
                         {

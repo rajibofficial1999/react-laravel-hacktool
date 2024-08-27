@@ -4,9 +4,12 @@ import DataTable from '@/Components/Table';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { Listbox, Menu } from '@headlessui/react';
 import { PencilIcon, TrashIcon } from '@heroicons/react/24/solid';
-import { Head, Link } from '@inertiajs/react';
+import { Head, Link, usePage } from '@inertiajs/react';
+import SuccessAlert from '@/Components/SuccessAlert';
 
 const AccountTypes = ({ accountTypes, meta }) => {
+
+    const {successMessage} = usePage().props.meta
 
     const headItems = [
         'Id',
@@ -25,6 +28,9 @@ const AccountTypes = ({ accountTypes, meta }) => {
             <Head title="Account Types" />
 
             <div className="w-full mt-6">
+
+                <SuccessAlert>{successMessage}</SuccessAlert>
+
                 <div className="bg-white">
                     <DataTable headItems={headItems}>
                         {

@@ -7,10 +7,13 @@ import { cn } from '@/lib/utils';
 import { Listbox, Menu } from '@headlessui/react';
 import { CheckIcon, TrashIcon } from '@heroicons/react/20/solid';
 import { PencilIcon } from '@heroicons/react/24/solid';
-import { Head, Link } from '@inertiajs/react';
+import { Head, Link, usePage } from '@inertiajs/react';
 import { useState } from 'react';
+import SuccessAlert from '@/Components/SuccessAlert';
 
 const Users = ({ auth, users, statuses, meta }) => {
+
+    const {successMessage} = usePage().props.meta
 
     const [filterStatuses, setFilterStatuses] = useState(statuses)
 
@@ -60,6 +63,9 @@ const Users = ({ auth, users, statuses, meta }) => {
             <Head title="Users" />
 
             <div className="w-full mt-6">
+
+            <SuccessAlert>{successMessage}</SuccessAlert>
+
                 <div className="bg-white">
                     <DataTable headItems={headItems}>
                         {

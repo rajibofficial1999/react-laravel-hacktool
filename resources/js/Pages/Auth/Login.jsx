@@ -54,7 +54,7 @@ export default function Login({ status }) {
                         onChange={(e) => setData('email', e.target.value)}
                     />
 
-                    <InputError message={errors.email} className="mt-2" />
+                    <InputError className="mt-2">{errors.email}</InputError>
                 </div>
 
                 <div className="mt-4">
@@ -70,8 +70,6 @@ export default function Login({ status }) {
                         placeholder="Enter password"
                         onChange={(e) => setData('password', e.target.value)}
                     />
-
-                    <InputError message={errors.password} className="mt-2" />
                 </div>
 
                 <div className="block mt-4">

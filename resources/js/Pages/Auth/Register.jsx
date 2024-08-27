@@ -46,7 +46,7 @@ export default function Register() {
                         required
                     />
 
-                    <InputError message={errors.name} className="mt-2" />
+                    <InputError className="mt-2">{errors.name}</InputError>
                 </div>
 
                 <div className="mt-4">
@@ -64,7 +64,7 @@ export default function Register() {
                         required
                     />
 
-                    <InputError message={errors.email} className="mt-2" />
+                    <InputError className="mt-2">{errors.email}</InputError>
                 </div>
 
                 <div className="mt-4">
@@ -82,7 +82,7 @@ export default function Register() {
                         required
                     />
 
-                    <InputError message={errors.password} className="mt-2" />
+                    <InputError className="mt-2">{errors.password}</InputError>
                 </div>
 
                 <div className="mt-4">
@@ -100,7 +100,7 @@ export default function Register() {
                         required
                     />
 
-                    <InputError message={errors.password_confirmation} className="mt-2" />
+                    <InputError className="mt-2">{errors.password_confirmation}</InputError>
                 </div>
 
                 <div className="flex items-center justify-between mt-4">
