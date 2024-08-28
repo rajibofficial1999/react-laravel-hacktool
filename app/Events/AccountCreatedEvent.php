@@ -27,7 +27,7 @@ class AccountCreatedEvent implements ShouldBroadcast
     {
         $this->account = $account;
 
-        if($user != null){
+        if ($user != null) {
             $this->dashboardData = DashboardData::realTimeData($user);
         }
     }

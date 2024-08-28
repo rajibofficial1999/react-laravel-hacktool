@@ -44,7 +44,7 @@ const Links = ({ auth, links }) => {
         <AuthenticatedLayout
             header='Links'
             linkItem={
-                <Link className={cn("bg-primary rounded-md text-white p-2", {'hidden' : !auth.user.is_admin})} href={route('admin.links.create')}>Create Link</Link>
+                <Link className={cn("bg-primary rounded-md text-white p-2 hidden", {'block' : auth.user.is_super_admin})} href={route('admin.links.create')}>Create Link</Link>
             }
         >
             <Head title="Links" />

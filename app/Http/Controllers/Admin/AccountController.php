@@ -12,10 +12,22 @@ class AccountController extends Controller
 {
     public function index()
     {
-        $accounts = Account::with(['type','owner'])->latest()->paginate(10);
+        $user = Auth::user();
 
-        if(!Auth::user()->isAdmin){
-            $accounts = Account::where('user_id', Auth::id())->with(['type','owner'])->latest()->paginate(10);
+        if($user->isAdmin){
+            $accounts = Account::whereHas("owner", function ($query) use ($user) {
+                return $query->where('team_id', $user->id);
+            })->orWhere('user_id', $user->id)->with(['type','owner'])->latest()->paginate(10);
+        }
+
+        if($user->isSuperAdmin){
+            $accounts = Account::with(['type','owner' => function ($query) {
+                return $query->with(['team']);
+            }])->latest()->paginate(10);
+        }
+
+        if(!$user->isSuperAdmin && !$user->isAdmin){
+            $accounts = Account::where('user_id', $user->id)->with(['type','owner'])->latest()->paginate(10);
         }
 
         return Inertia::render("Admin/Accounts/Index", [

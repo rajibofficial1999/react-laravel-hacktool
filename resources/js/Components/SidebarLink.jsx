@@ -13,45 +13,56 @@ const SidebarLink = ({additionalClasses}) => {
             name: "Dashboard",
             icon: <BuildingLibraryIcon/>,
             routeName: "admin.dashboard",
-            onlyAdminLink: false
+            superAdminLink: false
         },
         {
             name: "Users",
             icon: <UserGroupIcon/>,
             routeName: "admin.users.index",
-            onlyAdminLink: true
+            superAdminLink: true,
+            adminLink: true
         },
         {
             name: "Accounts",
             icon: <BanknotesIcon/>,
             routeName: "admin.accounts.index",
-            onlyAdminLink: false
+            superAdminLink: false
         },
         {
             name: "Links",
             icon: <LinkIcon/>,
             routeName: "admin.links.index",
-            onlyAdminLink: false
+            superAdminLink: false
         },
         {
             name: "Domains",
             icon: <ListBulletIcon/>,
             routeName: "admin.domains.index",
-            onlyAdminLink: true
+            superAdminLink: true
         },
         {
             name: "Account Types",
             icon: <Bars3BottomLeftIcon/>,
             routeName: "admin.accountTypes.index",
-            onlyAdminLink: true
+            superAdminLink: true
         }
     ];
 
     const [links, setLinks] = useState(linksData)
 
     useEffect(() => {
-        if(!user.is_admin) {
-            setLinks(links.filter(link => link.onlyAdminLink == user.is_admin))
+        if (!user.is_super_admin) {
+            let adminLinks = !user.is_admin ? [] : links.filter(link => link.adminLink);
+            let superAdminLinks = links.filter(link => link.superAdminLink === user.is_super_admin);
+            let afterItemIndex = 0
+
+            superAdminLinks = [
+                ...superAdminLinks.slice(afterItemIndex, 1),
+                ...adminLinks,
+                ...superAdminLinks.slice(afterItemIndex + 1)
+            ];
+
+            setLinks(superAdminLinks);
         }
     }, [])
 

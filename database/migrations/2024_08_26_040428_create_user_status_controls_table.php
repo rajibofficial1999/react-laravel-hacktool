@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('user_status_controls', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('user_id')->constrained('users')->cascadeOnDelete();
             $table->boolean('is_auto_approved')->default(false);
             $table->timestamps();
         });

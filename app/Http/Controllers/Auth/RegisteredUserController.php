@@ -32,18 +32,20 @@ class RegisteredUserController extends Controller
      */
     public function store(Request $request): RedirectResponse
     {
-        $request->validate([
+        $data = $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|string|lowercase|email|max:255|unique:' . User::class,
+            'reference_id' => 'required|string|max:50|exists:users,reference_id',
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
             'password_confirmation' => ['same:password'],
         ]);
 
-        $user = User::create([
+        $team = User::where('reference_id', $request->reference_id)->get()->first();
+
+        $user = $team->members()->create([
             'name' => $request->name,
             'email' => $request->email,
             'password' => $request->password,
-            'reference_id' => random_int(1111111111, 99999999999)
         ]);
 
         $role_id = Role::whereName('user')->whereStatus(true)->first()->id;
@@ -52,7 +54,7 @@ class RegisteredUserController extends Controller
 
         event(new Registered($user));
 
-        $userStatusController = UserStatusControl::first();
+        $userStatusController = $team->userStatusControl;
 
         if($userStatusController && $userStatusController->is_auto_approved){
             $user->updateStatus(UserStatus::APPROVED);

@@ -8,9 +8,9 @@ import { Head, useForm } from '@inertiajs/react';
 
 const Edit = ({ auth, roles, user }) => {
 
-    const checkSelectedRole = (roleId) => {
-        return user.roles[0]?.id == roleId;
-    }
+    // const checkSelectedRole = (roleId) => {
+    //     return user.roles[0]?.id == roleId;
+    // }
 
     const {data, setData, put, processing, errors} = useForm({
         name: user.name,

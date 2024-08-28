@@ -6,38 +6,35 @@ use App\Http\Controllers\Controller;
 use App\Models\UserStatusControl;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 
 class UserStatusController extends Controller
 {
     public function index()
     {
-        $userStatus = UserStatusControl::first();
+        $userStatusControl = Auth::user()->userStatusControl;
 
         return Inertia::render('Settings/Edit', [
-            'userStatus' => $userStatus ?? null,
+            'userStatusControl' => $userStatusControl,
         ]);
     }
 
     public function changeUserStatus(Request $request)
     {
         $request->validate([
-            'status' => 'required'
+            'status' => 'required|boolean',
+            'user' => 'required|numeric|exists:users,id',
         ]);
 
-        $is_auto_approved = $request->status;
+        $user_id = $request->user;
 
+        $userStatusControl = UserStatusControl::updateOrCreate([
+            'user_id'   => $user_id
+        ],[
+            'is_auto_approved'     => $request->status
+        ]);
 
-        if($existsUserStatus = UserStatusControl::first()){
-            $userStatus = UserStatusControl::find($existsUserStatus->id);
-        }else{
-            $userStatus = new UserStatusControl();
-        }
-
-        $userStatus->is_auto_approved = $is_auto_approved;
-
-        $userStatus->save();
-
-        return response()->json($userStatus, Response::HTTP_OK);
+        return response()->json($userStatusControl, Response::HTTP_OK);
     }
 }

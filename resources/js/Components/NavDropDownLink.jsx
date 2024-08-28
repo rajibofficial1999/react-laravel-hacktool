@@ -8,11 +8,11 @@ const NavDropDownLink = ({auth}) => {
             Profile
         </Link>
         {
-            auth.is_admin &&
+            auth.is_admin || auth.is_super_admin ?
 
             <Link href={route('settings.edit')} className={cn("block px-4 py-2 account-link hover:text-white")}>
                 Settings
-            </Link>
+            </Link> : ''
         }
         <Link as='button' method='post' href={route('logout')} className={cn("block w-full text-left px-4 py-2 account-link hover:text-white")}>
             Logout

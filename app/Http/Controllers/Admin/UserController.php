@@ -11,13 +11,26 @@ use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
 use Inertia\Inertia;
 
 class UserController extends Controller
 {
+    protected User $authUser;
+
+    public function __construct(){
+        $this->authUser = Auth::user();
+    }
+
     public function index()
     {
-        $users = User::with('roles')->where('id', '!=', Auth::id())->latest()->paginate(10);
+        if($this->authUser->isSuperAdmin) {
+            $users = User::with('roles')->where('id', '!=', $this->authUser->id)->latest()->paginate(10);
+        }
+
+        if($this->authUser->isAdmin) {
+            $users = $this->authUser->members()->latest()->paginate(10);
+        }
 
         return Inertia::render("Admin/Users/Index", [
             "users"=> $users,
@@ -27,17 +40,33 @@ class UserController extends Controller
 
     public function create()
     {
+        $roles = Role::when($this->authUser->isAdmin, function ($query) {
+            $query->whereName('user');
+        })->when($this->authUser->isSuperAdmin, function ($query) {
+            $query->where('name','!=', 'user');
+        })->whereStatus(true)->get();
+
         return Inertia::render("Admin/Users/Create", [
-            'roles' => Role::whereStatus(true)->get()
+            'roles' => $roles
         ]);
     }
 
     public function store(UserStoreRequest $request)
     {
         $data = $request->validated();
-        $data['reference_id'] = random_int(1111111111,9999999999);
 
-        $user = User::create($data);
+        $role = Role::find($data['role']);
+
+        if($role->name == 'admin') {
+            $reference_id = bin2hex(random_bytes(5));
+            $data['reference_id'] = strtoupper($reference_id);
+        }
+
+        if($role->name == 'user') {
+            $user = $this->authUser->members()->create($data);
+        }else{
+            $user = User::create($data);
+        }
 
         $user->roles()->attach($data['role']);
 
@@ -48,16 +77,24 @@ class UserController extends Controller
 
     public function edit(User $user)
     {
-        $user->load('roles');
+        Gate::authorize('manage-users', $user);
+
+        $roles = Role::when($this->authUser->isAdmin, function ($query) {
+            $query->whereName('user');
+        })->when($this->authUser->isSuperAdmin, function ($query) {
+            $query->where('name','!=', 'user');
+        })->whereStatus(true)->get();
 
         return Inertia::render("Admin/Users/Edit", [
             'user' => $user,
-            'roles' => Role::whereStatus(true)->get()
+            'roles' => $roles
         ]);
     }
 
     public function update(UserUpdateRequest $request, User $user)
     {
+        Gate::authorize('manage-users', $user);
+
         $data = $request->validated();
 
         if(!$data['password'] || $data['password'] == null){
@@ -73,6 +110,8 @@ class UserController extends Controller
 
     public function destroy(User $user): RedirectResponse
     {
+        Gate::authorize('manage-users', $user);
+
         $user->delete();
 
         return redirect()->back()->with('success','The user has successfully deleted');
@@ -80,6 +119,7 @@ class UserController extends Controller
 
     public function status(User $user, string $statusName): RedirectResponse
     {
+        Gate::authorize('manage-users', $user);
 
         $user->status = $statusName;
         $user->save();

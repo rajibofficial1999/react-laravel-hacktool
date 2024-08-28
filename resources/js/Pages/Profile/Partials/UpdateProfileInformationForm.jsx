@@ -3,14 +3,14 @@ import InputLabel from '@/Components/InputLabel';
 import PrimaryButton from '@/Components/PrimaryButton';
 import TextInput from '@/Components/TextInput';
 import { Link, useForm, usePage } from '@inertiajs/react';
-import { Transition } from '@headlessui/react';
 
 export default function UpdateProfileInformation({ mustVerifyEmail, status, className = '' }) {
-    const user = usePage().props.auth.user;
+    const { user } = usePage().props.auth;
 
     const { data, setData, patch, errors, processing } = useForm({
         name: user.name,
         email: user.email,
+        reference_id: user?.reference_id ?? null,
     });
 
     const submit = (e) => {
@@ -31,7 +31,7 @@ export default function UpdateProfileInformation({ mustVerifyEmail, status, clas
 
             <form onSubmit={submit} className="mt-6 space-y-6">
                 <div>
-                    <InputLabel htmlFor="name" value="Name" />
+                    <InputLabel htmlFor="name" value="Name"/>
 
                     <TextInput
                         id="name"
@@ -47,7 +47,7 @@ export default function UpdateProfileInformation({ mustVerifyEmail, status, clas
                 </div>
 
                 <div>
-                    <InputLabel htmlFor="email" value="Email" />
+                    <InputLabel htmlFor="email" value="Email"/>
 
                     <TextInput
                         id="email"
@@ -61,6 +61,25 @@ export default function UpdateProfileInformation({ mustVerifyEmail, status, clas
 
                     <InputError className="mt-2">{errors.email}</InputError>
                 </div>
+
+                {
+                    user?.is_admin ? <div>
+                        <InputLabel htmlFor="reference_id" value="Reference ID"/>
+
+                        <TextInput
+                            id="reference_id"
+                            type="text"
+                            className="mt-1 block w-full"
+                            value={data.reference_id?.toUpperCase()}
+                            onChange={(e) => setData('reference_id', e.target.value)}
+
+                            autoComplete="reference_id"
+                        />
+
+                        <InputError className="mt-2">{errors.reference_id}</InputError>
+                    </div> : ''
+
+                }
 
                 {mustVerifyEmail && user.email_verified_at === null && (
                     <div>

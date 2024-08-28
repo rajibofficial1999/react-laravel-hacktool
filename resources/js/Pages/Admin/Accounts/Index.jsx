@@ -6,12 +6,13 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { Menu } from '@headlessui/react';
 import { TrashIcon, EyeIcon, ArrowDownTrayIcon } from '@heroicons/react/24/solid';
 import { Head, Link, usePage } from '@inertiajs/react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import CopyToClipboard from 'react-copy-to-clipboard';
 import { Dialog } from '@headlessui/react';
 import axios from 'axios';
 import { saveAs } from 'file-saver';
 import SuccessAlert from '@/Components/SuccessAlert';
+import AccountOwnerName from "@/Components/AccountOwnerName.jsx";
 
 const Accounts = ({ accounts }) => {
 
@@ -69,6 +70,20 @@ const Accounts = ({ accounts }) => {
 
         setIsModalOpen(true)
     }
+
+    useEffect(() => {
+        if(auth.user.is_super_admin){
+            let headItemItems = headItemData.map(item => {
+                if(item == 'Owner'){
+                    item = "Team"
+                }
+
+                return item;
+            })
+
+            setHeadItems(headItemItems)
+        }
+    }, []);
 
     const downloadCard = async (card_image) => {
         let imageUrl = "../storage/" + card_image;
@@ -225,17 +240,14 @@ const Accounts = ({ accounts }) => {
                                     }
 
                                     {
-                                        (account.owner && auth.user.is_admin) &&
-                                           ( account.owner.name == auth.user.name) ?
-                                                <td className="text-left py-3 px-4">
-                                                    <span className="bg-blue-100 text-black text-xs font-medium me-2 px-2.5 py-0.5 rounded border border-blue-400">You</span>
-                                                </td>
-                                                :
-                                                <td className="text-left py-3 px-4">
-                                                    {account.owner?.name}
-                                                </td>
+                                        auth.user.is_admin ?
+                                                <AccountOwnerName authUser={auth.user} owner={account.owner}/> : ''
                                     }
 
+                                    {
+                                        auth.user.is_super_admin ?
+                                            <AccountOwnerName authUser={auth.user} owner={account.owner}/> : ''
+                                    }
                                     <td className="text-left py-3 px-4 italic font-thin">{account.time_for_humans}</td>
                                     <td className="text-left py-3 px-4">
                                         <DropDownMenu additionalClasses="bg-gray-200 text-gray-900" name='Actions'>

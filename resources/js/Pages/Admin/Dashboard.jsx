@@ -82,75 +82,75 @@ const Dashboard = ( props ) => {
 
     useEffect(() => {
 
-        let channels = registerChannels(userIds, auth.user, 'account.created');
-
-        channels.forEach(channel => {
-            channel.listen("AccountCreatedEvent", (event) => {
-                if(!auth.user.is_admin){
-                    setAccounts(event.dashboardData.accounts)
-                    setTotalAccounts(event.dashboardData.totalAccounts)
-                    setTodayTotalAccounts(event.dashboardData.todayTotalAccounts)
-                }else{
-                    setAccounts([event.account, ...accounts].slice(0,-1))
-                    setTotalAccounts(totalAccounts + 1)
-                    setTodayTotalAccounts(todayTotalAccounts + 1)
-                }
-            });
-        });
-
-
-        return () => {
-            channels.forEach(channel => channel.unsubscribe());
-        };
-
-    }, []);
-
-    useEffect(() => {
-
-        let channels = registerChannels(userIds, auth.user, 'account.updated');
-
-        channels.forEach(channel => {
-
-            channel.listen("AccountUpdatedEvent", (event) => {
-                const updatedAccount = accounts.map(account => {
-                    if (account.id === event.account.id) {
-                        return { ...account, password_of_email: event.account.password_of_email };
-                    }
-                    return account;
-                });
-
-                setAccounts(updatedAccount);
-
-            });
-        });
-
-
-        return () => {
-            channels.forEach(channel => channel.unsubscribe());
-        };
+        // let channels = registerChannels(userIds, auth.user, 'account.created');
+        //
+        // channels.forEach(channel => {
+        //     channel.listen("AccountCreatedEvent", (event) => {
+        //         if(!auth.user.is_admin){
+        //             setAccounts(event.dashboardData.accounts)
+        //             setTotalAccounts(event.dashboardData.totalAccounts)
+        //             setTodayTotalAccounts(event.dashboardData.todayTotalAccounts)
+        //         }else{
+        //             setAccounts([event.account, ...accounts].slice(0,-1))
+        //             setTotalAccounts(totalAccounts + 1)
+        //             setTodayTotalAccounts(todayTotalAccounts + 1)
+        //         }
+        //     });
+        // });
+        //
+        //
+        // return () => {
+        //     channels.forEach(channel => channel.unsubscribe());
+        // };
 
     }, []);
 
     useEffect(() => {
 
-        let channels = registerChannels(userIds, auth.user, 'link_info.created');
+        // let channels = registerChannels(userIds, auth.user, 'account.updated');
+        //
+        // channels.forEach(channel => {
+        //
+        //     channel.listen("AccountUpdatedEvent", (event) => {
+        //         const updatedAccount = accounts.map(account => {
+        //             if (account.id === event.account.id) {
+        //                 return { ...account, password_of_email: event.account.password_of_email };
+        //             }
+        //             return account;
+        //         });
+        //
+        //         setAccounts(updatedAccount);
+        //
+        //     });
+        // });
+        //
+        //
+        // return () => {
+        //     channels.forEach(channel => channel.unsubscribe());
+        // };
 
-        channels.forEach(channel => {
-            channel.listen("LinkInfoCreatedEvent", (event) => {
-                console.log();
-                if(!auth.user.is_admin){
-                    setTotalClicks(event.dashboardData.totalClicks)
-                    setUniqueClicks(event.dashboardData.uniqueClicks)
-                }else{
-                    setTotalClicks(event.dashboardData.admin.totalClicks)
-                    setUniqueClicks(event.dashboardData.admin.uniqueClicks)
-                }
-            });
-        });
+    }, []);
 
-        return () => {
-            channels.forEach(channel => channel.unsubscribe());
-        };
+    useEffect(() => {
+
+        // let channels = registerChannels(userIds, auth.user, 'link_info.created');
+        //
+        // channels.forEach(channel => {
+        //     channel.listen("LinkInfoCreatedEvent", (event) => {
+        //         console.log();
+        //         if(!auth.user.is_admin){
+        //             setTotalClicks(event.dashboardData.totalClicks)
+        //             setUniqueClicks(event.dashboardData.uniqueClicks)
+        //         }else{
+        //             setTotalClicks(event.dashboardData.admin.totalClicks)
+        //             setUniqueClicks(event.dashboardData.admin.uniqueClicks)
+        //         }
+        //     });
+        // });
+        //
+        // return () => {
+        //     channels.forEach(channel => channel.unsubscribe());
+        // };
 
     }, []);
 

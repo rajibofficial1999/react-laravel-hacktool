@@ -29,19 +29,23 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        Gate::define('has-permission', function () {
-            return Auth::user()->isAdmin ? Response::allow() : Response::deny('You must be an administrator.');
+        Gate::define('user-action-permission', function () {
+            return Auth::user()->isSuperAdmin || Auth::user()->isAdmin ? Response::allow() : Response::deny('You must be an administrator.');
         });
 
-        Gate::define('has-action-permission', function (User $user, $action_user_id) {
-            if(!Auth::user()->isAdmin){
-                return $user->id == $action_user_id ? Response::allow() : Response::deny('You do not have permission to do this.');
+        Gate::define('has-permission', function () {
+            return Auth::user()->isSuperAdmin ? Response::allow() : Response::deny('You must be an administrator.');
+        });
+
+        Gate::define('manage-users', function (User $authUser, User $user) {
+            if($authUser->isSuperAdmin){
+                return true;
             }
 
-            return true;
+            return $authUser->id === $user->team_id;
         });
 
-        Account::observe(AccountObserver::class);
-        LinkInfo::observe(LinkInfoObserver::class);
+//        Account::observe(AccountObserver::class);
+//        LinkInfo::observe(LinkInfoObserver::class);
     }
 }

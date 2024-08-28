@@ -7,7 +7,6 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { Head, useForm } from '@inertiajs/react';
 
 const Create = ({ auth, roles }) => {
-
     const {data, setData, post, processing, errors} = useForm({
         name: '',
         email: '',
@@ -43,10 +42,10 @@ const Create = ({ auth, roles }) => {
                                 </div>
                                 <div className="mt-2">
                                     <InputLabel htmlFor="role">Role</InputLabel>
-                                    <SelectInput id="role" onChange={e => setData('role', e.target.value)}>
-                                        <option value="">Select role</option>
+                                    <SelectInput id="role" onChange={e => setData('role', e.target.value)} defaultValue={data.role}>
+                                        <option value=''>Select Role</option>)
                                         {
-                                            roles.map(role => <option key={role.id} value={role.id}>{role.name}</option>)
+                                            roles.map((role) => <option key={role.id} value={role.id}>{role.name}</option>)
                                         }
                                     </SelectInput>
                                     <InputError className='mt-1'>{errors.role}</InputError>

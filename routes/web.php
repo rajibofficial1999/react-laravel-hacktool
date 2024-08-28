@@ -17,7 +17,7 @@ Route::middleware(['auth', 'verified'])->prefix('admin')->as('admin.')->group(fu
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::get('/settings', [DashboardController::class, 'index'])->name('settings');
 
-    Route::controller(UserController::class)->middleware('can:has-permission')->prefix('users')->as('users.')->group(function(){
+    Route::controller(UserController::class)->middleware('can:user-action-permission')->prefix('users')->as('users.')->group(function(){
         Route::get('/', 'index')->name('index');
         Route::get('/create', 'create')->name('create');
         Route::post('/', 'store')->name('store');
@@ -48,7 +48,6 @@ Route::middleware(['auth', 'verified'])->prefix('admin')->as('admin.')->group(fu
         Route::delete('/delete/{link}', 'destroy')->name('destroy')->middleware('can:has-permission');
     });
 
-
     Route::controller(AccountTypeController::class)->middleware('can:has-permission')->prefix('account-types')->as('accountTypes.')->group(function(){
         Route::get('/', 'index')->name('index');
         Route::get('/create', 'create')->name('create');
@@ -61,7 +60,6 @@ Route::middleware(['auth', 'verified'])->prefix('admin')->as('admin.')->group(fu
 
     Route::controller(AccountController::class)->prefix('accounts')->as('accounts.')->group(function(){
         Route::get('/', 'index')->name('index');
-        // Route::get('/download-cards/{accountId}', 'cardsDownload')->name('cards.download');
         Route::delete('/delete/{account}', 'destroy')->name('destroy')->middleware('can:has-action-permission, account.id');
     });
 

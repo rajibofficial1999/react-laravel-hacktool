@@ -9,5 +9,6 @@ class UserStatusControl extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['is_auto_approved'];
+    protected $fillable = ['is_auto_approved', 'user_id'];
+
 }

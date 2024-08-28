@@ -13,18 +13,13 @@ class DashboardData
         $startOfDay = now()->startOfDay()->subDay(); // Midnight last night
         $endOfDay = now()->endOfDay(); // Midnight of the current day
 
-        $accounts = Account::when(!$user->isAdmin, function($query) use ($user) {
-                                return $query->where("user_id", $user->id);
-                            })
+        $accounts = self::applyUserAccountFilter(Account::query(), $user)
                             ->with(['type', 'owner'])
                             ->latest()
                             ->take(5)
                             ->get();
 
-
-        $baseQuery = Account::when(!$user->isAdmin, function($query) use ($user) {
-                                return $query->where("user_id", $user->id);
-                            });
+        $baseQuery = self::applyUserAccountFilter(Account::query(), $user);
 
         $totalAccounts = $baseQuery
                         ->count();
@@ -34,9 +29,7 @@ class DashboardData
                             ->count();
 
 
-        $clicksQuery = LinkInfo::when(!$user->isAdmin, function($query) use ($user) {
-                                    return $query->where("user_id", $user->id);
-                                })
+        $clicksQuery = self::applyUserAccountFilter(LinkInfo::query(), $user)
                                 ->whereBetween('created_at', [$startOfDay, $endOfDay]);
 
         $totalClicks = $clicksQuery
@@ -46,22 +39,32 @@ class DashboardData
                         ->distinct()
                         ->count('ip_address');
 
-        $adminBaseClicks = LinkInfo::whereBetween('created_at', [$startOfDay, $endOfDay]);
-
         $data = [
-            'accounts'=> $accounts,
-            'totalAccounts'=> $totalAccounts,
-            'todayTotalAccounts'=> $todayTotalAccounts,
-            'totalClicks'=> $totalClicks,
-            'uniqueClicks'=> $uniqueClicks,
+            'accounts' => $accounts,
+            'totalAccounts' => $totalAccounts,
+            'todayTotalAccounts' => $todayTotalAccounts,
+            'totalClicks' => $totalClicks,
+            'uniqueClicks' => $uniqueClicks,
+            'admin' => [
+                'totalClicks' => $totalClicks,
+                'uniqueClicks' => $uniqueClicks,
+            ],
         ];
-
-        if($adminClickData){
-            $data['admin']['totalClicks'] = $adminBaseClicks->count();
-            $data['admin']['uniqueClicks'] = $adminBaseClicks->select('ip_address')->distinct()->count('ip_address');
-        }
 
         return $data;
     }
 
+    protected static function applyUserAccountFilter($query, $user)
+    {
+        return $query->when(!$user->isSuperAdmin, function($query) use ($user) {
+            return $query->when(!$user->isAdmin, function ($query) use ($user) {
+                return $query->where("user_id", $user->id);
+            });
+        })
+        ->when($user->isAdmin, function ($query) use ($user) {
+            return $query->whereHas("owner", function ($query) use ($user) {
+                return $query->where('team_id', $user->id);
+            })->orWhere('user_id', $user->id);
+        });
+    }
 }

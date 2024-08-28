@@ -14,7 +14,11 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        $admin = Role::create([
+        $superAdminRole = Role::create([
+            "name"=> "super-admin",
+        ]);
+
+        Role::create([
             "name"=> "admin",
         ]);
 
@@ -22,13 +26,12 @@ class DatabaseSeeder extends Seeder
             "name"=> "user",
         ]);
 
-        $user = User::factory()->create([
-            'name' => 'Admin User',
-            'email' => 'admin@admin.com',
-            'reference_id' => random_int(1111111111, 99999999999),
+        $superAdminUser = User::factory()->create([
+            'name' => 'Super Admin',
+            'email' => 'superadmin@admin.com',
             "status" => 'approved',
         ]);
 
-        $user->roles()->attach($admin->id);
+        $superAdminUser->roles()->attach($superAdminRole->id);
     }
 }

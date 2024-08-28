@@ -1,14 +1,16 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
-import { Head } from '@inertiajs/react';
+import { Head, usePage } from '@inertiajs/react';
 import axios from 'axios';
 import { useState } from 'react';
 
-export default function Edit({ userStatus }) {
+export default function Edit({ userStatusControl }) {
 
-    const [status, setStatus] = useState((userStatus && userStatus.is_auto_approved == 1) ? true : false)
+    const { user } = usePage().props.auth
+    const [status, setStatus] = useState((userStatusControl && userStatusControl.is_auto_approved == 1) ? true : false)
 
     const userStatusData = {
-        status: false
+        status: false,
+        user : user?.id
     }
 
     const submitStatus = async () => {
@@ -16,6 +18,7 @@ export default function Edit({ userStatus }) {
 
         const {data} = await axios.post('/api/v1/settings', userStatusData)
 
+        setStatus(true)
         setStatus(data.is_auto_approved == 1 ? true : false)
     }
 

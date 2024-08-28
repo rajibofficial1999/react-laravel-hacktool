@@ -10,6 +10,7 @@ export default function Register() {
     const { data, setData, post, processing, errors, reset } = useForm({
         name: '',
         email: '',
+        reference_id: '',
         password: '',
         password_confirmation: '',
     });
@@ -32,7 +33,7 @@ export default function Register() {
 
             <form onSubmit={submit}>
                 <div>
-                    <InputLabel htmlFor="name" value="Name" />
+                    <InputLabel htmlFor="name" value="Name"/>
 
                     <TextInput
                         id="name"
@@ -50,7 +51,7 @@ export default function Register() {
                 </div>
 
                 <div className="mt-4">
-                    <InputLabel htmlFor="email" value="Email" />
+                    <InputLabel htmlFor="email" value="Email"/>
 
                     <TextInput
                         id="email"
@@ -68,7 +69,25 @@ export default function Register() {
                 </div>
 
                 <div className="mt-4">
-                    <InputLabel htmlFor="password" value="Password" />
+                    <InputLabel htmlFor="reference_id" value="Reference ID"/>
+
+                    <TextInput
+                        id="reference_id"
+                        type="text"
+                        name="reference_id"
+                        value={data.reference_id}
+                        className="mt-1 block w-full"
+                        autoComplete="reference_id"
+                        placeholder="Reference ID"
+                        onChange={(e) => setData('reference_id', e.target.value)}
+                        required
+                    />
+
+                    <InputError className="mt-2">{errors.reference_id}</InputError>
+                </div>
+
+                <div className="mt-4">
+                    <InputLabel htmlFor="password" value="Password"/>
 
                     <TextInput
                         id="password"
@@ -86,7 +105,7 @@ export default function Register() {
                 </div>
 
                 <div className="mt-4">
-                    <InputLabel htmlFor="password_confirmation" value="Confirm Password" />
+                    <InputLabel htmlFor="password_confirmation" value="Confirm Password"/>
 
                     <TextInput
                         id="password_confirmation"

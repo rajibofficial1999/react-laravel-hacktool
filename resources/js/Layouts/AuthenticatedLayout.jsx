@@ -15,24 +15,24 @@ export default function Authenticated({ header, children, linkItem = '' }) {
     const { userIds } = usePage().props
     // const [play] = useSound(notification);
 
-    useEffect(() => {
-
-        let channels = registerChannels(userIds, user, 'account.created');
-
-        channels.forEach(channel => {
-            channel.listen("AccountCreatedEvent", (event) => {
-                console.log(event);
-                let audio = new Audio(notification);
-                audio.play();
-            });
-        });
-
-
-        return () => {
-            channels.forEach(channel => channel.unsubscribe());
-        };
-
-    }, []);
+    // useEffect(() => {
+    //
+    //     let channels = registerChannels(userIds, user, 'account.created');
+    //
+    //     channels.forEach(channel => {
+    //         channel.listen("AccountCreatedEvent", (event) => {
+    //             console.log(event);
+    //             let audio = new Audio(notification);
+    //             audio.play();
+    //         });
+    //     });
+    //
+    //
+    //     return () => {
+    //         channels.forEach(channel => channel.unsubscribe());
+    //     };
+    //
+    // }, []);
 
     return (
         <div className='bg-gray-100 flex overflow-hidden'>
