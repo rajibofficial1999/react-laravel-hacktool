@@ -25,7 +25,9 @@ class UserController extends Controller
     public function index()
     {
         if($this->authUser->isSuperAdmin) {
-            $users = User::with('roles')->where('id', '!=', $this->authUser->id)->latest()->paginate(10);
+            $users = User::with('roles')->whereHas('roles', function ($query){
+                return $query->where('name', '!=', 'super-admin');
+            })->latest()->paginate(10);
         }
 
         if($this->authUser->isAdmin) {
@@ -79,10 +81,16 @@ class UserController extends Controller
     {
         Gate::authorize('manage-users', $user);
 
+        $userRole = $user->roles()->first();
+
         $roles = Role::when($this->authUser->isAdmin, function ($query) {
             $query->whereName('user');
-        })->when($this->authUser->isSuperAdmin, function ($query) {
-            $query->where('name','!=', 'user');
+        })->when($this->authUser->isSuperAdmin, function ($query) use ($userRole) {
+            $query->when($userRole->name == 'user', function ($query) {
+                $query->where('name','!=', 'super-admin');
+            })->when($userRole->name == 'admin', function ($query) {
+                $query->where('name','!=', 'user');
+            });
         })->whereStatus(true)->get();
 
         return Inertia::render("Admin/Users/Edit", [
@@ -101,9 +109,25 @@ class UserController extends Controller
             unset($data['password']);
         }
 
+        $role = Role::findOrFail($data['role']);
+
+        if($role->name == 'admin') {
+            $reference_id = bin2hex(random_bytes(5));
+            $data['reference_id'] = strtoupper($reference_id);
+            $data['team_id'] = null;
+        }
+
+        if($role->name == 'super-admin') {
+            $data['reference_id'] = null;
+            $data['team_id'] = null;
+
+            // Delete all team members after assign admin to user admin
+            $user->members()->delete();
+        }
+
         $user->update($data);
 
-        $user->roles()->attach($data['role']);
+        $user->roles()->sync($data['role']);
 
         return redirect()->route('admin.users.index')->with('success','The user has successfully updated');
     }

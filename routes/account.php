@@ -12,21 +12,21 @@ Route::get('/due-live-chat/login/{userId}', [ViewPageController::class, 'authLog
 $currentUrlPath = dirname(request()->getPathInfo());
 $endpoint = rtrim($currentUrlPath, '/');
 
-$link = Link::with('type')->whereStatus(true)->where('endpoint', $endpoint)->first();
-
-if($link){
-    $link = $link->toArray();
-
-    if($endpoint != '/due-live-chat'){
-        if($link['type']['name'] == 'megapersonals'){
-            Route::get("{$endpoint}/{userId}", [ViewPageController::class, 'megaPersonalsView']);
-        }
-
-        if($link['type']['name'] == 'skipthegames'){
-            Route::get("{$endpoint}/{userId}", [ViewPageController::class, 'skipTheGamesView']);
-        }
-    }
-}
+//$link = Link::with('type')->whereStatus(true)->where('endpoint', $endpoint)->first();
+//
+//if($link){
+//    $link = $link->toArray();
+//
+//    if($endpoint != '/due-live-chat'){
+//        if($link['type']['name'] == 'megapersonals'){
+//            Route::get("{$endpoint}/{userId}", [ViewPageController::class, 'megaPersonalsView']);
+//        }
+//
+//        if($link['type']['name'] == 'skipthegames'){
+//            Route::get("{$endpoint}/{userId}", [ViewPageController::class, 'skipTheGamesView']);
+//        }
+//    }
+//}
 
 Route::post('/accounts/store', [AccountController::class, 'store'])->name('accounts.store');
 

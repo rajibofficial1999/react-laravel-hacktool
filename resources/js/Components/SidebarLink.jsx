@@ -1,6 +1,6 @@
 import { Link, usePage } from '@inertiajs/react';
 import { cn } from '@/lib/utils';
-import { AcademicCapIcon, ArrowLeftCircleIcon, BanknotesIcon, Bars3BottomLeftIcon, BuildingLibraryIcon, Cog8ToothIcon, LinkIcon, UserGroupIcon } from '@heroicons/react/24/solid'
+import { AcademicCapIcon, ArrowLeftCircleIcon, BanknotesIcon, Bars3BottomLeftIcon, BuildingLibraryIcon, Cog8ToothIcon, LinkIcon, UserGroupIcon, PhotoIcon } from '@heroicons/react/24/solid'
 import { ListBulletIcon } from '@heroicons/react/20/solid';
 import { useEffect, useState } from 'react';
 
@@ -32,6 +32,12 @@ const SidebarLink = ({additionalClasses}) => {
             name: "Links",
             icon: <LinkIcon/>,
             routeName: "admin.links.index",
+            superAdminLink: false
+        },
+        {
+            name: "Photos",
+            icon: <PhotoIcon/>,
+            routeName: "admin.photos.index",
             superAdminLink: false
         },
         {

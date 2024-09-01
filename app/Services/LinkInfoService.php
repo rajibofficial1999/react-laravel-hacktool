@@ -11,7 +11,7 @@ class LinkInfoService
     public function create(mixed $visitor_ip, int $user_id, ?int $account_type_id = null)
     {
 
-        $data = Location::get('66.102.0.0');
+        $data = Location::get($visitor_ip);
 
         if($data){
 

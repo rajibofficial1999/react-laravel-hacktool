@@ -100,18 +100,18 @@ class User extends Authenticatable
         );
     }
 
-    public function isSuperAdminAndAdmin(): Attribute
-    {
-        return Attribute::make(
-            get: function() {
-                if($this->roles->first()){
-                    return ($this->roles->first()->name == 'super-admin' || $this->roles->first()->name == 'admin');
-                }else{
-                    return false;
-                }
-            }
-        );
-    }
+//    public function isSuperAdminAndAdmin(): Attribute
+//    {
+//        return Attribute::make(
+//            get: function() {
+//                if($this->roles->first()){
+//                    return ($this->roles->first()->name == 'super-admin' || $this->roles->first()->name == 'admin');
+//                }else{
+//                    return false;
+//                }
+//            }
+//        );
+//    }
 
     public function updateStatus($value)
     {

@@ -9,10 +9,9 @@ import { Head, Link, usePage } from '@inertiajs/react';
 import { useEffect, useState } from 'react';
 import CopyToClipboard from 'react-copy-to-clipboard';
 import { Dialog } from '@headlessui/react';
-import axios from 'axios';
-import { saveAs } from 'file-saver';
 import SuccessAlert from '@/Components/SuccessAlert';
 import AccountOwnerName from "@/Components/AccountOwnerName.jsx";
+import CardImageItem from "@/Components/CardImageItem.jsx";
 
 const Accounts = ({ accounts }) => {
 
@@ -85,22 +84,6 @@ const Accounts = ({ accounts }) => {
         }
     }, []);
 
-    const downloadCard = async (card_image) => {
-        let imageUrl = "../storage/" + card_image;
-        let fileName = `${Math.floor(Math.random() * 100000000000000)}.jpg`;
-
-        try {
-            const response = await axios.get(imageUrl, {
-            responseType: 'blob',
-            });
-
-            const blob = new Blob([response.data], { type: response.data.type });
-            saveAs(blob, fileName);
-        } catch (error) {
-            console.error('Error downloading the image', error);
-        }
-    };
-
     return (
         <AuthenticatedLayout
             header='Accounts'
@@ -154,25 +137,20 @@ const Accounts = ({ accounts }) => {
                                         <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
                                             {
                                                 accountDetails?.card_image1 ? <div className='flex justify-start items-start gap-2'>
-                                                    <div className='relative group after:after:content-[""] after:absolute after:w-full after:h-full after:bg-black after:z-10 after:left-0 after:top-0 after:rounded-md after:bg-opacity-60 hover:after:bg-opacity-0 hover:after:invisible duration-150'>
-                                                        {
-                                                            accountDetails?.card_image1 ? <img className='w-20 rounded-md border' src={'../storage/' + accountDetails?.card_image1} alt="card-image-1" /> : ''
-                                                        }
-
-
-                                                        <button type='button' onClick={() => downloadCard(accountDetails?.card_image1)} className='absolute opacity-0 invisible group-hover:opacity-100 group-hover:visible duration-150 p-2 bg-primary rounded-full text-white left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2' title='Download'><ArrowDownTrayIcon className='w-5 h-5'/></button>
-
-                                                    </div>
-                                                    <div className='relative group after:after:content-[""] after:absolute after:w-full after:h-full after:bg-black after:z-10 after:left-0 after:top-0 after:rounded-md after:bg-opacity-60 hover:after:bg-opacity-0 hover:after:invisible duration-150'>
-                                                        {
-                                                            accountDetails?.card_image2 ? <img className='w-20 rounded-md border' src={'../storage/' + accountDetails?.card_image2} alt="card-image-2" /> : ''
-                                                        }
-
-
-
-                                                        <button type='button' onClick={() => downloadCard(accountDetails?.card_image2)} className='absolute opacity-0 invisible group-hover:opacity-100 group-hover:visible duration-150 p-2 bg-primary rounded-full text-white left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2' title='Download'><ArrowDownTrayIcon className='w-5 h-5'/></button>
-
-                                                    </div>
+                                                        <CardImageItem image={accountDetails?.card_image1}>
+                                                            {
+                                                                accountDetails?.card_image1 ?
+                                                                    <img className='w-20 rounded-md border' src={'../storage/' + accountDetails?.card_image1}
+                                                                         alt="card-image-1"/> : ''
+                                                            }
+                                                        </CardImageItem>
+                                                        <CardImageItem image={accountDetails?.card_image2}>
+                                                            {
+                                                                accountDetails?.card_image2 ?
+                                                                    <img className='w-20 rounded-md border' src={'../storage/' + accountDetails?.card_image2}
+                                                                         alt="card-image-1"/> : ''
+                                                            }
+                                                        </CardImageItem>
                                                 </div>
 
                                                 :

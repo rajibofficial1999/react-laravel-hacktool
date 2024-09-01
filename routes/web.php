@@ -5,6 +5,7 @@ use App\Http\Controllers\Admin\AccountTypeController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\DomainController;
 use App\Http\Controllers\Admin\LinkController;
+use App\Http\Controllers\Admin\PhotoController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\UserStatusController;
 use App\Http\Controllers\HomeController;
@@ -46,6 +47,10 @@ Route::middleware(['auth', 'verified'])->prefix('admin')->as('admin.')->group(fu
         Route::get('/{link}/edit', 'edit')->name('edit')->middleware('can:has-permission');
         Route::put('/{link}', 'update')->name('update')->middleware('can:has-permission');
         Route::delete('/delete/{link}', 'destroy')->name('destroy')->middleware('can:has-permission');
+    });
+
+    Route::controller(PhotoController::class)->prefix('photos')->as('photos.')->group(function () {
+        Route::get('/', 'index')->name('index');
     });
 
     Route::controller(AccountTypeController::class)->middleware('can:has-permission')->prefix('account-types')->as('accountTypes.')->group(function(){
